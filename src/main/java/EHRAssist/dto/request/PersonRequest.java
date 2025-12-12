@@ -1,9 +1,9 @@
 package EHRAssist.dto.request;
 
-import EHRAssist.dto.request.metaRequest.AddressInfoRequest;
-import EHRAssist.dto.request.metaRequest.ExtensionsInfoRequest;
-import EHRAssist.dto.request.metaRequest.NameInfoRequest;
-import EHRAssist.dto.request.metaRequest.TelecomInfoRequest;
+import EHRAssist.dto.request.personMetaRequest.AddressInfoRequest;
+import EHRAssist.dto.request.personMetaRequest.ExtensionsInfoRequest;
+import EHRAssist.dto.request.personMetaRequest.NameInfoRequest;
+import EHRAssist.dto.request.personMetaRequest.TelecomInfoRequest;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,7 +15,8 @@ import java.time.LocalDate;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PatientSearchRequest {
+public class PersonRequest {
+    private String resourceType;
     private NameInfoRequest nameRequest;
     private AddressInfoRequest address;
     private TelecomInfoRequest telecom;

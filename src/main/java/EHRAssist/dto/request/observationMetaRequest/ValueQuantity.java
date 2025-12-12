@@ -1,4 +1,4 @@
-package EHRAssist.dto.request.metaRequest;
+package EHRAssist.dto.request.observationMetaRequest;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class TelecomInfoRequest {
-    private String system;
-    private String value;
-    private String useTel;
+public class ValueQuantity {
+    private Integer value;
+    private String unit;
+    private String comparator;
 }

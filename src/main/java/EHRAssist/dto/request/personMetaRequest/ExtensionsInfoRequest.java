@@ -1,4 +1,4 @@
-package EHRAssist.dto.request.metaRequest;
+package EHRAssist.dto.request.personMetaRequest;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

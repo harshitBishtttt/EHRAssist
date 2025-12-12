@@ -1,9 +1,9 @@
 package EHRAssist.service;
 
-import EHRAssist.dto.request.PatientSearchRequest;
-import EHRAssist.dto.request.metaRequest.AddressInfoRequest;
-import EHRAssist.dto.request.metaRequest.NameInfoRequest;
-import EHRAssist.dto.request.metaRequest.TelecomInfoRequest;
+import EHRAssist.dto.request.PersonRequest;
+import EHRAssist.dto.request.personMetaRequest.AddressInfoRequest;
+import EHRAssist.dto.request.personMetaRequest.NameInfoRequest;
+import EHRAssist.dto.request.personMetaRequest.TelecomInfoRequest;
 import EHRAssist.dto.response.PersonsResponse;
 import EHRAssist.dto.response.SearchResponse;
 import EHRAssist.dto.response.patientSearchR4Response.*;
@@ -21,7 +21,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Service
-public class PatientService {
+public class PersonSearchService {
 
     @Value("${EHRassist.database.header}")
     private String databaseName;
@@ -37,7 +37,7 @@ public class PatientService {
                 .append(attribute).append(" = :").append(attribute).append(") and ");
     }
 
-    private String createCustomJPQL(PatientSearchRequest request) {
+    private String createCustomJPQL(PersonRequest request) {
         NameInfoRequest name = request.getNameRequest();
         AddressInfoRequest address = request.getAddress();
         TelecomInfoRequest telecom = request.getTelecom();
@@ -97,7 +97,7 @@ public class PatientService {
     }
 
 
-    private Query setValueToJPQLQuery(String jpql, PatientSearchRequest request) {
+    private Query setValueToJPQLQuery(String jpql, PersonRequest request) {
         Query query = entityManager.createQuery(jpql, Person.class);
         NameInfoRequest name = request.getNameRequest();
         AddressInfoRequest address = request.getAddress();
@@ -146,7 +146,7 @@ public class PatientService {
         return query;
     }
 
-    public PersonsResponse searchPersonWithDynamicQuery(PatientSearchRequest request) {
+    public PersonsResponse searchPersonWithDynamicQuery(PersonRequest request) {
         PersonsResponse response = new PersonsResponse();
         String jpql = createCustomJPQL(request);
         Query query = setValueToJPQLQuery(jpql, request);
@@ -155,7 +155,7 @@ public class PatientService {
         return response;
     }
 
-    public PersonsResponse searchPerson(PatientSearchRequest request, Pageable pageable) {
+    public PersonsResponse searchPerson(PersonRequest request, Pageable pageable) {
         PersonsResponse person = new PersonsResponse();
         NameInfoRequest name = request.getNameRequest();
         AddressInfoRequest address = request.getAddress();

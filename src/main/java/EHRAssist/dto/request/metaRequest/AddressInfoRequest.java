@@ -10,8 +10,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AddressInfoRequest {
-    private String address;
-    private String addressCity;
-    private String addressPostalCode;
-    private String addressState;
+    private String addressOne;
+    private String addressTwo;
+    private String addressThree;
+    private String postalCode;
+    private String country;
 }

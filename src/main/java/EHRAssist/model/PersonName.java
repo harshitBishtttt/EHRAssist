@@ -15,12 +15,12 @@ public class PersonName {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "name")
-    private String name;
+    @Column(name = "first_name")
+    private String firstName;
 
-    @Column(name = "family")
-    private String family;   // surname
+    @Column(name = "middle_name")
+    private String middleName;   // surname
 
-    @Column(name = "given")
-    private String given;
+    @Column(name = "last_name")
+    private String lastName;
 }

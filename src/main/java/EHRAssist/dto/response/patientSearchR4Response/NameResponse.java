@@ -13,6 +13,6 @@ import java.util.List;
 @AllArgsConstructor
 public class NameResponse {
     private String use;
+    private List<String> given;
     private String family;
-    //private List<String> given;
 }

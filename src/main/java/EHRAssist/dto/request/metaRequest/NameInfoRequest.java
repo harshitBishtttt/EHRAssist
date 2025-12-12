@@ -10,8 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class NameInfoRequest {
-    private String family;
-    private String given;
-    private String name;
-    private String ownName;
+    private String firstName;
+    private String middleName;
+    private String lastName;
 }

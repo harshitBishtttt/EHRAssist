@@ -6,7 +6,6 @@ import EHRAssist.dto.request.metaRequest.NameInfoRequest;
 import EHRAssist.dto.request.metaRequest.TelecomInfoRequest;
 import EHRAssist.dto.response.PersonsResponse;
 import EHRAssist.dto.response.SearchResponse;
-
 import EHRAssist.dto.response.patientSearchR4Response.*;
 import EHRAssist.model.Person;
 import EHRAssist.repository.PersonRepository;
@@ -54,23 +53,29 @@ public class PatientService {
         if (request.getBirthdate() != null) {
             appendClauseToQuery(query, "p", "birthdate");
         }
-        if (name.getFamily() != null && !name.getFamily().isEmpty()) {
-            appendClauseToQuery(query, "pn", "family");
+        if (name.getFirstName() != null && !name.getFirstName().isEmpty()) {
+            appendClauseToQuery(query, "pn", "first_name");
         }
-        if (name.getGiven() != null && !name.getGiven().isEmpty()) {
-            appendClauseToQuery(query, "pn", "given");
+        if (name.getMiddleName() != null && !name.getMiddleName().isEmpty()) {
+            appendClauseToQuery(query, "pn", "middle_name");
         }
-        if (name.getName() != null && !name.getName().isEmpty()) {
-            appendClauseToQuery(query, "pn", "name");
+        if (name.getLastName() != null && !name.getLastName().isEmpty()) {
+            appendClauseToQuery(query, "pn", "last_name");
         }
-        if (address.getAddressCity() != null && !address.getAddressCity().isEmpty()) {
-            appendClauseToQuery(query, "pa", "city");
+        if (address.getAddressOne() != null && !address.getAddressOne().isEmpty()) {
+            appendClauseToQuery(query, "pa", "address_one");
         }
-        if (address.getAddressPostalCode() != null && !address.getAddressPostalCode().isEmpty()) {
-            appendClauseToQuery(query, "pa", "postalCode");
+        if (address.getAddressTwo() != null && !address.getAddressTwo().isEmpty()) {
+            appendClauseToQuery(query, "pa", "address_two");
         }
-        if (address.getAddressState() != null && !address.getAddressState().isEmpty()) {
-            appendClauseToQuery(query, "pa", "state");
+        if (address.getAddressThree() != null && !address.getAddressThree().isEmpty()) {
+            appendClauseToQuery(query, "pa", "address_three");
+        }
+        if (address.getPostalCode() != null && !address.getPostalCode().isEmpty()) {
+            appendClauseToQuery(query, "pa", "postal_code");
+        }
+        if (address.getCountry() != null && !address.getCountry().isEmpty()) {
+            appendClauseToQuery(query, "pa", "country");
         }
         if (telecom.getUseTel() != null && !telecom.getUseTel().isEmpty()) {
             appendClauseToQuery(query, "pt", "useTel");
@@ -103,23 +108,29 @@ public class PatientService {
         if (request.getBirthdate() != null) {
             query.setParameter("birthdate", request.getBirthdate());
         }
-        if (name.getFamily() != null && !name.getFamily().isEmpty()) {
-            query.setParameter("family", name.getFamily());
+        if (name.getFirstName() != null && !name.getFirstName().isEmpty()) {
+            query.setParameter("first_name", name.getFirstName());
         }
-        if (name.getGiven() != null && !name.getGiven().isEmpty()) {
-            query.setParameter("given", name.getGiven());
+        if (name.getMiddleName() != null && !name.getMiddleName().isEmpty()) {
+            query.setParameter("middle_name", name.getMiddleName());
         }
-        if (name.getName() != null && !name.getName().isEmpty()) {
-            query.setParameter("name", name.getName());
+        if (name.getLastName() != null && !name.getLastName().isEmpty()) {
+            query.setParameter("last_name", name.getLastName());
         }
-        if (address.getAddressCity() != null && !address.getAddressCity().isEmpty()) {
-            query.setParameter("city", address.getAddressCity());
+        if (address.getAddressOne() != null && !address.getAddressOne().isEmpty()) {
+            query.setParameter("address_one", address.getAddressOne());
         }
-        if (address.getAddressPostalCode() != null && !address.getAddressPostalCode().isEmpty()) {
-            query.setParameter("postalCode", address.getAddressPostalCode());
+        if (address.getAddressTwo() != null && !address.getAddressTwo().isEmpty()) {
+            query.setParameter("address_two", address.getAddressTwo());
         }
-        if (address.getAddressState() != null && !address.getAddressState().isEmpty()) {
-            query.setParameter("state", address.getAddressState());
+        if (address.getAddressThree() != null && !address.getAddressThree().isEmpty()) {
+            query.setParameter("address_three", address.getAddressThree());
+        }
+        if (address.getPostalCode() != null && !address.getPostalCode().isEmpty()) {
+            query.setParameter("postal_code", address.getPostalCode());
+        }
+        if (address.getCountry() != null && !address.getCountry().isEmpty()) {
+            query.setParameter("country", address.getCountry());
         }
         if (telecom.getUseTel() != null && !telecom.getUseTel().isEmpty()) {
             query.setParameter("useTel", telecom.getUseTel());
@@ -150,15 +161,17 @@ public class PatientService {
         TelecomInfoRequest telecom = request.getTelecom();
         List<Person> data = patientRepository.findAllPersons(
                 request.getGender(), request.getBirthdate(),
-                name.getFamily(),
-                name.getGiven(),
-                name.getName(),
-                address.getAddressCity(),
-                address.getAddressState(),
-                address.getAddressPostalCode(),
-                address.getAddress(),  //line is address
+                name.getFirstName(),
+                name.getMiddleName(),
+                name.getLastName(),
+                address.getAddressOne(),
+                address.getAddressTwo(),
+                address.getAddressThree(),
+                address.getPostalCode(),  //line is address
+                address.getCountry(),
                 telecom.getSystem(),
-                telecom.getValue());
+                telecom.getValue(),
+                telecom.getUseTel());
         int count = data.size();
         person.setResourceType("Bundel");
         person.setTotal(count);
@@ -167,14 +180,16 @@ public class PatientService {
             List<AddressResponse> addressResponses = ittr.getPersonAddress().stream().map(add -> {
                 return AddressResponse.builder()
                         .country(add.getCountry())
-                        .line(add.getLine())
+                        .line(add.getAddressOne())
                         .postalCode(add.getPostalCode())
-                        .state(add.getState())
-                        .city(add.getCity())
+                        .state(add.getAddressTwo())
+                        .city(add.getAddressThree())
                         .build();
             }).toList();
             List<NameResponse> nameResponse = ittr.getPersonName().stream().map(nameObj -> {
-                return NameResponse.builder().use(nameObj.getName()).family(nameObj.getFamily()).build();
+                return NameResponse.builder().use(nameObj.getFirstName())
+                        .given(Arrays.asList(nameObj.getFirstName(), nameObj.getMiddleName()))
+                        .family(nameObj.getLastName()).build();
             }).toList();
             List<TelecomResponse> telecomResponses = ittr.getPatientTelecom().stream().map(tel -> {
                 return TelecomResponse.builder()
@@ -189,7 +204,7 @@ public class PatientService {
             entityResponse.setResource(ResourceResponse.
                     builder()
                     .resourceType("Person")
-                    .id(ittr.getRowId())
+                    .id(ittr.getSubjectId())
                     .address(addressResponses)
                     .name(nameResponse)
                     .identifier(Arrays.asList(new IdentifierResponse())) // This field is incomplete

@@ -13,17 +13,17 @@ import lombok.NoArgsConstructor;
 public class PersonAddress {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "address_id", nullable = false)
+    @Column(name = "id", nullable = false)
     private Integer id;   // PK auto-increment
 
-    @Column(name = "line", columnDefinition = "NVARCHAR(MAX)")
-    private String line;         // full address lines (can store JSON or comma-separated list)
+    @Column(name = "address_one", columnDefinition = "NVARCHAR(MAX)")
+    private String addressOne;         // full address lines (can store JSON or comma-separated list)
 
-    @Column(name = "city")
-    private String city;
+    @Column(name = "address_two")
+    private String addressTwo;
 
-    @Column(name = "state")
-    private String state;
+    @Column(name = "address_three")
+    private String addressThree;
 
     @Column(name = "postal_code")
     private String postalCode;

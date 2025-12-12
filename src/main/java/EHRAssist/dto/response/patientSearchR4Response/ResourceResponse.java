@@ -14,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 public class ResourceResponse {
     private String resourceType;
-    private Short id;
+    private Integer id;
     private List<IdentifierResponse> identifier;
     private List<NameResponse> name;
     private List<TelecomResponse> telecom;

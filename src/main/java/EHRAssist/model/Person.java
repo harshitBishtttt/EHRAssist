@@ -55,17 +55,17 @@ public class Person {
     private LocalDate birthdate;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "person_id")
+    @JoinColumn(name = "subject_id_from_person_table")
     @BatchSize(size = 20)
     private Set<PersonTelecom> patientTelecom;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "person_id")
+    @JoinColumn(name = "subject_id_from_person_table")
     @BatchSize(size = 20)
     private Set<PersonAddress> personAddress;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "person_id")
+    @JoinColumn(name = "subject_id_from_person_table")
     @BatchSize(size = 20)
     private Set<PersonName> personName;
 

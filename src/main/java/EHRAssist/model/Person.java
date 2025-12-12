@@ -4,11 +4,9 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.BatchSize;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -55,18 +53,24 @@ public class Person {
     private LocalDate birthdate;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "subject_id_from_person_table")
-    @BatchSize(size = 20)
+    @JoinColumn(
+            name = "subject_id_from_person_table",
+            referencedColumnName = "subject_id" // <-- use this column in Person
+    )
     private Set<PersonTelecom> patientTelecom;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "subject_id_from_person_table")
-    @BatchSize(size = 20)
+    @JoinColumn(
+            name = "subject_id_from_person_table",
+            referencedColumnName = "subject_id" // <-- use this column in Person
+    )
     private Set<PersonAddress> personAddress;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "subject_id_from_person_table")
-    @BatchSize(size = 20)
+    @JoinColumn(
+            name = "subject_id_from_person_table",
+            referencedColumnName = "subject_id" // <-- use this column in Person
+    )
     private Set<PersonName> personName;
 
 }

@@ -13,9 +13,9 @@ import java.util.List;
 public interface PersonRepository extends JpaRepository<Person, Short> {
     @Query("""
                 SELECT DISTINCT p FROM Person p
-                    JOIN p.personAddress pa
-                    JOIN p.personName pn
-                    JOIN p.patientTelecom pt
+                    LEFT JOIN FETCH p.personAddress pa
+                    LEFT JOIN FETCH p.personName pn
+                    LEFT JOIN FETCH p.patientTelecom pt
                 WHERE (:gender IS NULL OR :gender = '' OR p.gender = :gender)
                     AND (:birthdate IS NULL OR p.birthdate = :birthdate)
                     AND (:firstName IS NULL OR :firstName = '' OR pn.firstName = :firstName)

@@ -14,6 +14,7 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -154,7 +155,7 @@ public class PatientService {
         return response;
     }
 
-    public PersonsResponse searchPerson(PatientSearchRequest request) {
+    public PersonsResponse searchPerson(PatientSearchRequest request, Pageable pageable) {
         PersonsResponse person = new PersonsResponse();
         NameInfoRequest name = request.getNameRequest();
         AddressInfoRequest address = request.getAddress();

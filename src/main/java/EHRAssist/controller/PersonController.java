@@ -2,7 +2,7 @@ package EHRAssist.controller;
 
 import EHRAssist.dto.request.ObservationRequest;
 import EHRAssist.dto.request.PersonRequest;
-import EHRAssist.dto.response.PersonsResponse;
+import EHRAssist.dto.response.PersonsSearchResponse;
 import EHRAssist.dto.response.PersonObservationResponse;
 import EHRAssist.service.ObservationService;
 import EHRAssist.service.PersonSearchService;
@@ -24,7 +24,7 @@ public class PersonController {
     private ObservationService observationsService;
 
     @PostMapping("/person-search")
-    ResponseEntity<PersonsResponse> searchPerson(@RequestBody PersonRequest request, Pageable pageable) {
+    ResponseEntity<PersonsSearchResponse> searchPerson(@RequestBody PersonRequest request, Pageable pageable) {
         return ResponseEntity.ok(patientService.searchPerson(request, pageable));
     }
 

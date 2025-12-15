@@ -12,5 +12,5 @@ import lombok.NoArgsConstructor;
 public class EntityResponse {
     private String fullUrl;
     private ResourceResponse resource;
-    private SearchResponse searchResponse;
+    private SearchResponse mode;
 }

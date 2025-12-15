@@ -4,7 +4,7 @@ import EHRAssist.dto.request.PersonRequest;
 import EHRAssist.dto.request.personMetaRequest.AddressInfoRequest;
 import EHRAssist.dto.request.personMetaRequest.NameInfoRequest;
 import EHRAssist.dto.request.personMetaRequest.TelecomInfoRequest;
-import EHRAssist.dto.response.PersonsResponse;
+import EHRAssist.dto.response.PersonsSearchResponse;
 import EHRAssist.dto.response.searchR4Response.SearchResponse;
 import EHRAssist.dto.response.searchR4Response.*;
 import EHRAssist.model.Person;
@@ -146,8 +146,8 @@ public class PersonSearchService {
         return query;
     }
 
-    public PersonsResponse searchPersonWithDynamicQuery(PersonRequest request) {
-        PersonsResponse response = new PersonsResponse();
+    public PersonsSearchResponse searchPersonWithDynamicQuery(PersonRequest request) {
+        PersonsSearchResponse response = new PersonsSearchResponse();
         String jpql = createCustomJPQL(request);
         Query query = setValueToJPQLQuery(jpql, request);
         List<Person> resultList = query.getResultList();
@@ -155,8 +155,8 @@ public class PersonSearchService {
         return response;
     }
 
-    public PersonsResponse searchPerson(PersonRequest request, Pageable pageable) {
-        PersonsResponse person = new PersonsResponse();
+    public PersonsSearchResponse searchPerson(PersonRequest request, Pageable pageable) {
+        PersonsSearchResponse person = new PersonsSearchResponse();
         NameInfoRequest name = request.getNameRequest();
         AddressInfoRequest address = request.getAddress();
         TelecomInfoRequest telecom = request.getTelecom();
@@ -174,9 +174,6 @@ public class PersonSearchService {
                 telecom.getValue(),
                 telecom.getUseTel());
         int count = data.size();
-        person.setResourceType("Bundel");
-        person.setTotal(count);
-        person.setType("Patient.Search (Demographics) (R4) ");
         List<EntityResponse> entityResponses = data.stream().map(ittr -> {
             List<AddressResponse> addressResponses = ittr.getPersonAddress().stream().map(add -> {
                 return AddressResponse.builder()
@@ -199,7 +196,6 @@ public class PersonSearchService {
                         .value(tel.getValue())
                         .build();
             }).toList();
-
             EntityResponse entityResponse = new EntityResponse();
             entityResponse.setFullUrl("");
             entityResponse.setResource(ResourceResponse.
@@ -211,10 +207,13 @@ public class PersonSearchService {
                     .identifier(Arrays.asList(new IdentifierResponse())) // This field is incomplete
                     .telecom(telecomResponses)
                     .build());
-            entityResponse.setSearchResponse(count > 0 ? SearchResponse.builder()
+            entityResponse.setMode(count > 0 ? SearchResponse.builder()
                     .mode("Matched").build() : SearchResponse.builder().mode("Non -Mtched").build());
             return entityResponse;
         }).toList();
+        person.setResourceType("Bundle");
+        person.setTotal(count);
+        person.setType("searchset");
         person.setEntry(entityResponses);
         return person;
     }

@@ -12,7 +12,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PersonsResponse {
+public class PersonsSearchResponse {
     private String resourceType;
     private String type;
     private Integer total;

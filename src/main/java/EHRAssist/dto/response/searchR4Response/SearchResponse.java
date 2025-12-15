@@ -1,4 +1,4 @@
-package EHRAssist.dto.response;
+package EHRAssist.dto.response.searchR4Response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

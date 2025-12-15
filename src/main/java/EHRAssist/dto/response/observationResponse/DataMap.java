@@ -11,9 +11,11 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Test {
-    private String name;
-    private Double value;
-    private LocalDateTime date;
-    private String uom;
+public class DataMap {
+    private Coding coding;
+    private String encounter;
+    private String specimen;
+    private LocalDateTime collectedDateTime;
+    private ValueQuantity valueQuantity;
+    private Interpretation interpretation;
 }

@@ -9,8 +9,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Patient {
-    private String firstName;
-    private String middleName;
-    private String lastName;
+public class ValueQuantity {
+    private Double value;
+    private String unit;
+    private String system;
+    private String code;
 }

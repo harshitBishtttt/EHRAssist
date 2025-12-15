@@ -1,5 +1,7 @@
-package EHRAssist.dto.response.observationResponse;
+package EHRAssist.dto.response;
 
+import EHRAssist.dto.response.observationResponse.DataMap;
+import EHRAssist.dto.response.observationResponse.Subject;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,8 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 public class PersonObservationResponse {
     private String resourceType;
-    private String type;
     private Integer total;
-    private List<Patient> patient;
-    private List<Test> tests;
+    private Subject reference;
+    private List<DataMap> dataMap;
 }

@@ -3,7 +3,7 @@ package EHRAssist.controller;
 import EHRAssist.dto.request.ObservationRequest;
 import EHRAssist.dto.request.PersonRequest;
 import EHRAssist.dto.response.PersonsResponse;
-import EHRAssist.dto.response.observationResponse.PersonObservationResponse;
+import EHRAssist.dto.response.PersonObservationResponse;
 import EHRAssist.service.ObservationService;
 import EHRAssist.service.PersonSearchService;
 import org.springframework.beans.factory.annotation.Autowired;

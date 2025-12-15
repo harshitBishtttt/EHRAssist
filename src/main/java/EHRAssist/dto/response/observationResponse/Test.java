@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class Test {
     private String name;
-    private Float value;
+    private Double value;
     private LocalDateTime date;
     private String uom;
 }

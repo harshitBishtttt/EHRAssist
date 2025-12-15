@@ -5,7 +5,6 @@ import EHRAssist.dto.response.observationResponse.Patient;
 import EHRAssist.dto.response.observationResponse.PersonObservationResponse;
 import EHRAssist.dto.response.observationResponse.Test;
 import EHRAssist.model.Person;
-import EHRAssist.model.PersonName;
 import EHRAssist.repository.EHRAssistQueryDao.ObservationDao;
 import EHRAssist.repository.PersonRepository;
 import jakarta.persistence.Query;
@@ -15,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class ObservationService {
@@ -44,7 +42,7 @@ public class ObservationService {
             observationResponse.setTests(resultList.stream().map(ittr -> {
                 Test obj = new Test();
                 obj.setName((String) ittr[8]);
-                obj.setValue((Float) ittr[5]);
+                obj.setValue((Double) ittr[5]);
                 obj.setDate((LocalDateTime) ittr[3]);
                 obj.setUom((String) ittr[6]);
                 return obj;

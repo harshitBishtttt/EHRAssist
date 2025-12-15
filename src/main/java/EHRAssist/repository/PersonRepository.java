@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface PersonRepository extends JpaRepository<Person, Short> {
@@ -45,6 +46,8 @@ public interface PersonRepository extends JpaRepository<Person, Short> {
             @Param("value") String value,
             @Param("useTel") String useTel
     );
+
+    Person findBySubjectId(Integer id);
 
 
 }

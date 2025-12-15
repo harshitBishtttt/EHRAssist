@@ -1,6 +1,5 @@
-package EHRAssist.dto.response;
+package EHRAssist.dto.response.observationResponse;
 
-import EHRAssist.dto.response.searchR4Response.EntityResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,10 +11,10 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PersonsResponse {
+public class PersonObservationResponse {
     private String resourceType;
     private String type;
     private Integer total;
-    List<EntityResponse> entry;
-
+    private List<Patient> patient;
+    private List<Test> tests;
 }

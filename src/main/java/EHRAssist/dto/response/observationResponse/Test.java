@@ -1,16 +1,19 @@
-package EHRAssist.dto.request.observationMetaRequest;
+package EHRAssist.dto.response.observationResponse;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ValueQuantity {
+public class Test {
+    private String name;
     private Float value;
-    private String unit;
-    private String comparator;
+    private LocalDateTime date;
+    private String uom;
 }

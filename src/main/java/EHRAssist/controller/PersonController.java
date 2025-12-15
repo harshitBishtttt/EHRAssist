@@ -2,8 +2,8 @@ package EHRAssist.controller;
 
 import EHRAssist.dto.request.ObservationRequest;
 import EHRAssist.dto.request.PersonRequest;
-import EHRAssist.dto.response.ObservationResponse;
 import EHRAssist.dto.response.PersonsResponse;
+import EHRAssist.dto.response.observationResponse.PersonObservationResponse;
 import EHRAssist.service.ObservationService;
 import EHRAssist.service.PersonSearchService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,7 @@ public class PersonController {
     }
 
     @PostMapping("/person-observation")
-    ResponseEntity<ObservationResponse> getPersonObservations(@RequestBody ObservationRequest request, Pageable pageable) {
+    ResponseEntity<PersonObservationResponse> getPersonObservations(@RequestBody ObservationRequest request, Pageable pageable) {
         return ResponseEntity.ok(observationsService.getPersonObservations(request, pageable));
     }
 

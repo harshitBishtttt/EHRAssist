@@ -6,7 +6,7 @@ import EHRAssist.dto.request.personMetaRequest.NameInfoRequest;
 import EHRAssist.dto.request.personMetaRequest.TelecomInfoRequest;
 import EHRAssist.dto.response.PersonsResponse;
 import EHRAssist.dto.response.SearchResponse;
-import EHRAssist.dto.response.patientSearchR4Response.*;
+import EHRAssist.dto.response.searchR4Response.*;
 import EHRAssist.model.Person;
 import EHRAssist.repository.PersonRepository;
 import jakarta.persistence.EntityManager;

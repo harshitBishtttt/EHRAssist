@@ -1,89 +1,56 @@
 package EHRAssist.service;
 
 import EHRAssist.dto.request.ObservationRequest;
-import EHRAssist.dto.request.observationMetaRequest.Code;
-import EHRAssist.dto.request.observationMetaRequest.Specimen;
-import EHRAssist.dto.request.observationMetaRequest.Subject;
-import EHRAssist.dto.request.observationMetaRequest.ValueQuantity;
-import EHRAssist.dto.response.ObservationResponse;
+import EHRAssist.dto.response.observationResponse.Patient;
+import EHRAssist.dto.response.observationResponse.PersonObservationResponse;
+import EHRAssist.dto.response.observationResponse.Test;
+import EHRAssist.model.Person;
+import EHRAssist.model.PersonName;
+import EHRAssist.repository.EHRAssistQueryDao.ObservationDao;
+import EHRAssist.repository.PersonRepository;
+import jakarta.persistence.Query;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class ObservationService {
 
-    private void appendBasicClause(StringBuilder query, String entity, String attribute) {
-        query.append("(").append(entity).append(".").append(attribute).append(" IS NULL OR ").append(entity).append(".")
-                .append(attribute).append(" = :").append(attribute).append(") and ");
-    }
+    @Autowired
+    private ObservationDao observationDao;
+    @Autowired
+    private PersonRepository personRepository;
 
-    private void appendWithInClause(StringBuilder query, String entity, String attribute) {
-        query.append(entity)
-                .append(".")
-                .append(attribute)
-                .append(" IN (:")
-                .append(attribute)
-                .append(") and ");
-    }
-
-    private void appendOperatorBaseClause(StringBuilder query, String entity, String attribute, String operator) {
-        query.append(entity)
-                .append(".")
-                .append(attribute)
-                .append(" ")
-                .append(operator)
-                .append(" :")
-                .append(attribute)
-                .append(" and ");
-    }
-
-    private String buildObservationQuery(ObservationRequest request) {
-        StringBuilder query = new StringBuilder("SELECT pm FROM PersonMeasurement pm " +
-                "LEFT JOIN FETCH pm.measurementMasters pt where ");
-        Code code = request.getCode();
-        Subject subject = request.getSubject();
-        List<String> itemId = request.getItemId();
-        LocalDateTime effectiveDateTime = request.getEffectiveDateTime();
-        Specimen specimen = request.getSpecimen();
-        ValueQuantity valueQuantity = request.getValueQuantity();
-        if (subject.getIdentifier() != null && !subject.getIdentifier().isEmpty()) {
-            appendBasicClause(query, "pm", "subjectId");
+    public PersonObservationResponse getPersonObservations(ObservationRequest request, Pageable page) {
+        PersonObservationResponse observationResponse = new PersonObservationResponse();
+        String nativeQuery = observationDao.getNativeObservationQuery(request);
+        Query query = observationDao.setValueToNativeObservationQuery(nativeQuery, request);
+        List<Object[]> resultList = query.getResultList();
+        observationResponse.setResourceType("Observation");
+        observationResponse.setTotal(resultList.size());
+        Person getPersonName = personRepository.findBySubjectId((Integer) resultList.get(0)[0]);
+        observationResponse.setPatient(getPersonName.getPersonName().stream().map(ittr -> {
+            Patient obj = new Patient();
+            obj.setFirstName(ittr.getFirstName());
+            obj.setMiddleName(ittr.getMiddleName());
+            obj.setLastName(ittr.getLastName());
+            return obj;
+        }).toList());
+        if (!resultList.isEmpty()) {
+            observationResponse.setTests(resultList.stream().map(ittr -> {
+                Test obj = new Test();
+                obj.setName((String) ittr[8]);
+                obj.setValue((Float) ittr[5]);
+                obj.setDate((LocalDateTime) ittr[3]);
+                obj.setUom((String) ittr[6]);
+                return obj;
+            }).toList());
         }
-        if (effectiveDateTime != null) {
-            appendBasicClause(query, "pm", "chartTime");
-        }
-        if (itemId != null && !itemId.isEmpty()) {
-            appendWithInClause(query, "pm", "itemid");
-        }
-        if (specimen.getIdentifier() != null && !specimen.getIdentifier().isEmpty()) {
-            appendBasicClause(query, "pm", "category");
-        }
-        if (code.getCoding() != null && !code.getCoding().isEmpty()) {
-            appendBasicClause(query, "pm", "loincCode");
-        }
-        if (valueQuantity.getUnit() != null && !valueQuantity.getUnit().isEmpty()) {
-            appendBasicClause(query, "pm", "valueUom");
-        }
-        if ((valueQuantity.getValue() != null && valueQuantity.getComparator() != null)
-                && !valueQuantity.getComparator().isEmpty()) {
-            appendOperatorBaseClause(query, "pm", "valueNum", valueQuantity.getComparator());
-        }
-        int len = query.length();
-        if (len >= 4 && query.substring(len - 4).equals("and ")) {
-            query.delete(len - 4, len);
-        }
-        return query.toString();
-
-    }
-
-    public ObservationResponse getPersonObservations(ObservationRequest request, Pageable page) {
-        String query = buildObservationQuery(request);
-
-        System.out.println(query);
-        return null;
+        return observationResponse;
     }
 
 }

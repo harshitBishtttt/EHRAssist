@@ -1,4 +1,4 @@
-package EHRAssist.dto.response.patientSearchR4Response;
+package EHRAssist.dto.response.searchR4Response;
 
 import EHRAssist.dto.response.SearchResponse;
 import lombok.AllArgsConstructor;

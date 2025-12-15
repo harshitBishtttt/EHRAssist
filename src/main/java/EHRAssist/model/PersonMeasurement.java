@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.Set;
 
 @Entity
 @Table(name = "Person_Measurement")
@@ -36,7 +35,7 @@ public class PersonMeasurement {
     private Integer valueNum;
 
     @Column(name = "valueuom")
-    private Integer valueUom;
+    private String valueUom;
 
     @Column(name = "flag")
     private String flag;

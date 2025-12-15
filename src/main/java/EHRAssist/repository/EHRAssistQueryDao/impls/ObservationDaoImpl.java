@@ -33,7 +33,7 @@ public class ObservationDaoImpl implements ObservationDao {
                         "    WHERE pm.subject_id = :subjectId " +
                         ") " +
                         "SELECT " +
-                        "    lm.subject_id, " +
+                        "    lm.row_id ,lm.subject_id, " +
                         "    lm.hadm_id, " +
                         "    lm.itemid, " +
                         "    lm.charttime, " +
@@ -43,7 +43,7 @@ public class ObservationDaoImpl implements ObservationDao {
                         "    lm.flag, " +
                         "    mm.label, " +
                         "    mm.category, " +
-                        "    mm.fluid, " +
+                        "    mm.fluid, mm.category, " +
                         "    mm.loinc_code " +
                         "FROM LatestMeasurements lm " +
                         "LEFT JOIN UCIH.dbo.Measurement_master mm ON mm.itemid = lm.itemid " +

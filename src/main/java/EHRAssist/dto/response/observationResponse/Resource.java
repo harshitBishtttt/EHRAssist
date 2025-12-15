@@ -11,11 +11,15 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class DataMap {
-    private Coding coding;
-    private String encounter;
-    private String specimen;
-    private LocalDateTime collectedDateTime;
+public class Resource {
+    private String resourceType;
+    private Integer id;
+    private String status;
+    private Code code;
+    private Subject subject;
+    private LocalDateTime effectiveDateTime;
     private ValueQuantity valueQuantity;
-    private Interpretation interpretation;
+
+    private Specimen specimen;
+    private String encounter;
 }

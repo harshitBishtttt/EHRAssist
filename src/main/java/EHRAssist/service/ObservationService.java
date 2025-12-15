@@ -4,7 +4,6 @@ import EHRAssist.dto.request.ObservationRequest;
 
 import EHRAssist.dto.response.PersonObservationResponse;
 import EHRAssist.dto.response.observationResponse.*;
-import EHRAssist.dto.response.searchR4Response.NameResponse;
 import EHRAssist.model.Person;
 import EHRAssist.repository.EHRAssistQueryDao.ObservationDao;
 import EHRAssist.repository.PersonRepository;
@@ -16,6 +15,7 @@ import org.springframework.util.ObjectUtils;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -33,33 +33,33 @@ public class ObservationService {
         List<Object[]> resultList = query.getResultList();
         Integer subjectId = Integer.parseInt(request.getSubject().getIdentifier());
         Person getPersonName = personRepository.findBySubjectId(subjectId);
-        Subject name = new Subject();
-        List<DataMap> dataMap = null;
-        name.setId(subjectId);
-        name.setNames(getPersonName.getPersonName().stream().map(ittr -> {
-            NameResponse nameResponse = new NameResponse();
-            nameResponse.setUse(ittr.getFirstName());
-            nameResponse.setFamily(ittr.getLastName());
-            nameResponse.setGiven(Arrays.asList(ittr.getMiddleName(), ittr.getLastName()));
-            return nameResponse;
-        }).toList());
+        List<Entry> entry = null;
         if (!resultList.isEmpty()) {
-            dataMap = resultList.stream().map(ittr -> {
-                return DataMap.builder()
-                        .coding(Coding.builder().text((String) resultList.get(0)[8]).code((String) resultList.get(0)[11]).system("http://loinc.org").build())
-                        .encounter(!ObjectUtils.isEmpty(resultList.get(0)[1]) ? (String) resultList.get(0)[1] : "")
-                        .collectedDateTime((LocalDateTime) resultList.get(0)[3])
-                        .valueQuantity(ValueQuantity.builder().value((Double) resultList.get(0)[5])
-                                .unit((String) resultList.get(0)[6]).code("").system("http://unitsofmeasure.org").build())
-                        .interpretation(Interpretation.builder()
-                                .display(!ObjectUtils.isEmpty(resultList.get(0)[7]) ? (String) resultList.get(0)[7] : "")
-                                .system("http://unitsofmeasure.org").build()).specimen((String) resultList.get(0)[10]).build();
+            entry = resultList.stream().map(ittr -> {
+                return Entry.builder()
+                        .resource(Resource.builder().id((Integer) resultList.get(0)[0])
+                                .subject(Subject.builder().reference("Patient/" + resultList.get(0)[1]).build())
+                                .status("final")
+                                .resourceType("Observation")
+                                .code(Code.builder()
+                                        .coding(Collections.singletonList(Coding.builder().text((String) resultList.get(0)[9])
+                                                .code((String) resultList.get(0)[13])
+                                                .system("http://loinc.org").build())).build())
+                                .encounter(!ObjectUtils.isEmpty(resultList.get(0)[2]) ? "Encounter/" + (String) resultList.get(0)[2] : "Encounter/56743")
+                                .effectiveDateTime((LocalDateTime) resultList.get(0)[4])
+                                .valueQuantity(ValueQuantity.builder()
+                                        .value((Double) resultList.get(0)[6])
+                                        .unit((String) resultList.get(0)[7]).code((String) resultList.get(0)[7]).system("http://unitsofmeasure.org")
+                                        .build())
+                                .specimen(Specimen.builder().display((String) resultList.get(0)[11])
+                                        .reference("Specimen/" + (String) resultList.get(0)[12]).build())
+                                .build()).build();
             }).toList();
         }
-        observationResponse.setResourceType("Observation");
+        observationResponse.setResourceType("Bundle");
         observationResponse.setTotal(resultList.size());
-        observationResponse.setReference(name);
-        observationResponse.setDataMap(dataMap);
+        observationResponse.setEntry(entry);
+        observationResponse.setType("searchset");
         return observationResponse;
     }
 

@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Subject {
-    private String reference;
+public class Entry {
+    Resource resource;
 }

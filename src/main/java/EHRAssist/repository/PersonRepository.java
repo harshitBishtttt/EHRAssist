@@ -2,46 +2,38 @@ package EHRAssist.repository;
 
 import EHRAssist.model.Person;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface PersonRepository extends JpaRepository<Person, Short> {
-//    @Query("""
-//                SELECT DISTINCT p FROM Person p
-//                    LEFT JOIN  p.personAddress pa
-//                    LEFT JOIN  p.personName pn
-//                    LEFT JOIN  p.personTelecom pt
-//                WHERE (:gender IS NULL OR :gender = '' OR p.gender = :gender)
-//                    AND (:birthdate IS NULL OR p.birthdate = :birthdate)
-//                    AND (:firstName IS NULL OR :firstName = '' OR pn.firstName = :firstName)
-//                    AND (:middleName IS NULL OR :middleName = '' OR pn.middleName = :middleName)
-//                    AND (:lastName IS NULL OR :lastName = '' OR pn.lastName = :lastName)
-//                    AND (:addressOne IS NULL OR :addressOne = '' OR pa.addressOne = :addressOne)
-//                    AND (:addressTwo IS NULL OR :addressTwo = '' OR pa.addressTwo = :addressTwo)
-//                    AND (:postalCode IS NULL OR :postalCode = '' OR pa.postalCode = :postalCode)
-//                    AND (:country IS NULL OR :country = '' OR pa.country = :country)
-//                    AND (:system IS NULL OR :system = '' OR pt.system = :system)
-//                    AND (:value IS NULL OR :value = '' OR pt.value = :value)
-//                    AND (:useTel IS NULL OR :useTel = '' OR pt.useTel = :useTel)
-//            """)
-//    List<Person> findAllPersons(
-//            @Param("gender") String gender,
-//            @Param("birthdate") LocalDate birthdate,
-//            @Param("firstName") String firstName,
-//            @Param("middleName") String middleName,
-//            @Param("lastName") String lastName,
-//            @Param("addressOne") String addressOne,
-//            @Param("addressTwo") String addressTwo,
-//            @Param("postalCode") String postalCode,
-//            @Param("country") String country,
-//            @Param("system") String system,
-//            @Param("value") String value,
-//            @Param("useTel") String useTel
-//    );
+    @Query("""
+                SELECT DISTINCT p
+                FROM Person p
+                LEFT JOIN p.personName pn
+                LEFT JOIN p.personTelecom pt
+                WHERE (:family IS NULL OR :family = '' OR pn.lastName = :family)
+                  AND (:given IS NULL OR :given = '' OR pn.firstName = :given)
+                  AND (:gender IS NULL OR :gender = '' OR p.gender = :gender)
+                  AND (:birthdate IS NULL OR p.birthdate = :birthdate)
+                  AND (
+                        :email IS NULL OR :email = '' 
+                        OR (pt.system = 'email' AND pt.value = :email)
+                      )
+            """)
+    Optional<List<Person>> searchPerson(
+            @Param("family") String family,
+            @Param("given") String given,
+            @Param("email") String email,
+            @Param("birthdate") LocalDate birthdate,
+            @Param("gender") String gender
+    );
 
-    //Person findBySubjectId(Integer id);
 
     Optional<Person> findByPersonTelecom_SystemAndPersonTelecom_Value(String system, String value);
 

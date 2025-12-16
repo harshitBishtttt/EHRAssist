@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -85,6 +86,32 @@ public class PatientSearchServiceImpl implements PatientSearchService {
             }).toList());
         }
         return resource;
+    }
+
+    public PatientSearchResponse searchPatient(String family,
+                                               String given,
+                                               String email,
+                                               LocalDate birthdate,
+                                               String gender,
+                                               Pageable pageable) {
+        PatientSearchResponse searchResponse = new PatientSearchResponse();
+        Optional<List<Person>> getPersons = personRepository
+                .searchPerson(family, given, email, birthdate, gender);
+        searchResponse.setResourceType("Bundle");
+        searchResponse.setMeta(Meta.builder().lastUpdated(String.valueOf(LocalDateTime.now())).build());
+        searchResponse.setType("searchset");
+        searchResponse.setLink(Collections.singletonList(Link.builder().url("").relation("self").build()));
+        if (getPersons.isPresent()) {
+            List<Person> people = getPersons.get();
+            List<Entry> matched = people.stream().map(ittr -> {
+                return Entry.builder().fullUrl("https://hapi.fhir.org/baseR4/Patient/" + ittr.getSubjectId())
+                        .resource(resourceMapper(ittr)).mode(SearchResponse.builder().mode("matched").build()).build();
+            }).toList();
+
+            searchResponse.setTotal(matched.size());
+            searchResponse.setEntry(matched);
+        }
+        return searchResponse;
     }
 
     public PatientSearchResponse searchPatientByEmail(String email, Pageable pageable) {

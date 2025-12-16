@@ -62,8 +62,8 @@ public class PatientSearchServiceImpl implements PatientSearchService {
         }
 
         resource.setMaritalStatus(MaritalStatus.builder()
-                .text(person.getMaritalStatus()
-                        .toUpperCase(Locale.ROOT))
+                .text(!ObjectUtils.isEmpty(person.getMaritalStatus()) ?
+                        person.getMaritalStatus().toUpperCase(Locale.ROOT) : "")
                 .coding(Collections.singletonList(Coding.builder().code(person.getMaritalCode())
                         .display(person.getMaritalStatus())
                         .system("http://terminology.hl7.org/CodeSystem/v3-MaritalStatus")
@@ -72,7 +72,8 @@ public class PatientSearchServiceImpl implements PatientSearchService {
         if (!ObjectUtils.isEmpty(person.getPersonLanguages())) {
             resource.setCommunication(person.getPersonLanguages().stream().map(ittr -> {
                 Communication communication = new Communication();
-                Language language = Language.builder().text(ittr.getLanguageName().toUpperCase(Locale.ROOT))
+                Language language = Language.builder().text(!ObjectUtils.isEmpty(ittr.getLanguageName())
+                                ? ittr.getLanguageName().toUpperCase(Locale.ROOT) : "")
                         .coding(Collections.singletonList(Coding.builder()
                                 .system("urn:ietf:bcp:47")
                                 .code(ittr.getLanguageCode())

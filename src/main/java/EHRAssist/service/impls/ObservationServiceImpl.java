@@ -1,10 +1,8 @@
-package EHRAssist.service;
+package EHRAssist.service.impls;
 
 import EHRAssist.dto.request.ObservationRequest;
-
 import EHRAssist.dto.response.PersonObservationResponse;
 import EHRAssist.dto.response.observationResponse.*;
-import EHRAssist.model.Person;
 import EHRAssist.repository.EHRAssistQueryDao.ObservationDao;
 import EHRAssist.repository.PersonRepository;
 import jakarta.persistence.Query;
@@ -14,12 +12,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 @Service
-public class ObservationService {
+public class ObservationServiceImpl {
 
     @Autowired
     private ObservationDao observationDao;
@@ -32,7 +29,7 @@ public class ObservationService {
         Query query = observationDao.setValueToNativeObservationQuery(nativeQuery, request);
         List<Object[]> resultList = query.getResultList();
         Integer subjectId = Integer.parseInt(request.getSubject().getIdentifier());
-        Person getPersonName = personRepository.findBySubjectId(subjectId);
+
         List<Entry> entry = null;
         if (!resultList.isEmpty()) {
             entry = resultList.stream().map(ittr -> {

@@ -1,4 +1,4 @@
-package EHRAssist.dto.response.searchR4Response;
+package EHRAssist.dto.response.patientSearchResponse;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,14 +12,19 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ResourceResponse {
+public class Resource {
     private String resourceType;
     private Integer id;
-    private List<IdentifierResponse> identifier;
+    private EntryMeta meta;
+    private Text text;
+    private List<Extension> extension;
     private List<NameResponse> name;
     private List<TelecomResponse> telecom;
     private String gender;
     private LocalDate birthDate;
-    private List<AddressResponse> address;
-    private List<ExtensionResponse> extension;
+    private List<Address> address;
+    private MaritalStatus maritalStatus;
+    private List<Communication> communication;
+
+
 }

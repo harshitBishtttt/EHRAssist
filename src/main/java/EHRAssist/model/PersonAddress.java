@@ -22,12 +22,12 @@ public class PersonAddress {
     @Column(name = "address_two")
     private String addressTwo;
 
-    @Column(name = "address_three")
-    private String addressThree;
+    @Column(name = "city")
+    private String city;
 
     @Column(name = "postal_code")
     private String postalCode;
 
-    @Column(name = "country")
-    private String country;
+    @Column(name = "state")
+    private String state;
 }

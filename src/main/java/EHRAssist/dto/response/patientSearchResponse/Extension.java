@@ -1,4 +1,4 @@
-package EHRAssist.dto.response.searchR4Response;
+package EHRAssist.dto.response.patientSearchResponse;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,8 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class TelecomResponse {
-    private String system;
-    private String value;
-    private String use;
+public class Extension {
+    private String url;
+    private String valueString;
 }

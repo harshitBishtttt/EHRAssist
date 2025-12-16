@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -52,12 +53,18 @@ public class Person {
     @Column(name = "birth_date")
     private LocalDate birthdate;
 
+    @Column(name = "marital_code")
+    private String maritalCode;
+
+    @Column(name = "marital_status")
+    private String maritalStatus;
+
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(
             name = "subject_id_from_person_table",
             referencedColumnName = "subject_id" // <-- use this column in Person
     )
-    private Set<PersonTelecom> patientTelecom;
+    private Set<PersonTelecom> personTelecom;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(
@@ -72,5 +79,21 @@ public class Person {
             referencedColumnName = "subject_id" // <-- use this column in Person
     )
     private Set<PersonName> personName;
+
+
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(
+            name = "subject_id_from_person_table",
+            referencedColumnName = "subject_id" // <-- use this column in Person
+    )
+    private List<Extension> extensions;
+
+
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(
+            name = "subject_id_from_person_table",
+            referencedColumnName = "subject_id" // <-- use this column in Person
+    )
+    private List<PersonLanguage> personLanguages;
 
 }

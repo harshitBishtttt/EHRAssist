@@ -1,15 +1,17 @@
-package EHRAssist.dto.response.searchR4Response;
+package EHRAssist.dto.response.patientSearchResponse;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class IdentifierResponse {
-    private String system;
-    private String value;
+public class MaritalStatus {
+    private List<Coding> coding;
+    private String text;
 }

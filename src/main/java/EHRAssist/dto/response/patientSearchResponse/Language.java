@@ -1,4 +1,4 @@
-package EHRAssist.dto.response.searchR4Response;
+package EHRAssist.dto.response.patientSearchResponse;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,8 +11,8 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class NameResponse {
-    private String use;
-    private List<String> given;
-    private String family;
+public class Language {
+    private String language;
+    private List<Coding> coding;
+    private String text;
 }

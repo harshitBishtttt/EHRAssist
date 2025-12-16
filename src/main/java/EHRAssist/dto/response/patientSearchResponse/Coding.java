@@ -1,4 +1,4 @@
-package EHRAssist.dto.response.observationResponse;
+package EHRAssist.dto.response.patientSearchResponse;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Entry {
-    private Resource resource;
+public class Coding {
+    private String system;
+    private String code;
+    private String display;
 }

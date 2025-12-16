@@ -1,4 +1,4 @@
-package EHRAssist.dto.response.searchR4Response;
+package EHRAssist.dto.response.patientSearchResponse;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class EntityResponse {
+public class Entry {
     private String fullUrl;
-    private ResourceResponse resource;
+    private Resource resource;
     private SearchResponse mode;
 }

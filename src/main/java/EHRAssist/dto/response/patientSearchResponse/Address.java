@@ -1,18 +1,19 @@
-package EHRAssist.dto.response.searchR4Response;
+package EHRAssist.dto.response.patientSearchResponse;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AddressResponse {
-    private String line;
+public class Address {
+    private List<String> line;
     private String city;
     private String state;
-    private String country;
     private String postalCode;
 }

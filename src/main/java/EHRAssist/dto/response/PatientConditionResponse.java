@@ -1,9 +1,8 @@
 package EHRAssist.dto.response;
 
-
-import EHRAssist.dto.response.patientSearchResponse.Entry;
-import EHRAssist.dto.response.patientSearchResponse.Link;
-import EHRAssist.dto.response.patientSearchResponse.Meta;
+import EHRAssist.dto.response.patientConditionResponse.Entry;
+import EHRAssist.dto.response.patientConditionResponse.Meta;
+import EHRAssist.dto.response.patientConditionResponse.Link;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,12 +14,12 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PatientSearchResponse {
+public class PatientConditionResponse {
     private String resourceType;
     private String id;
     private Meta meta;
     private String type;
     private Integer total;
     private List<Link> link;
-    List<Entry> entry;
+    private List<Entry> entry;
 }

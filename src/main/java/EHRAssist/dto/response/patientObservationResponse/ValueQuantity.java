@@ -1,4 +1,4 @@
-package EHRAssist.dto.response.observationResponse;
+package EHRAssist.dto.response.patientObservationResponse;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,8 +9,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Coding {
+public class ValueQuantity {
+    private Double value;
+    private String unit;
     private String system;
     private String code;
-    private String text;
 }

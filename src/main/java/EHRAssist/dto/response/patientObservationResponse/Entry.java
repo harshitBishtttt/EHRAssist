@@ -1,4 +1,4 @@
-package EHRAssist.dto.response.observationResponse;
+package EHRAssist.dto.response.patientObservationResponse;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Subject {
-    private String reference;
+public class Entry {
+    private Resource resource;
 }

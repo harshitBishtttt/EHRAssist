@@ -1,4 +1,4 @@
-package EHRAssist.dto.response.observationResponse;
+package EHRAssist.dto.response.patientObservationResponse;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

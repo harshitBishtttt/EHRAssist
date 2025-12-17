@@ -1,8 +1,8 @@
 package EHRAssist.service.impls;
 
 import EHRAssist.dto.request.ObservationRequest;
-import EHRAssist.dto.response.PersonObservationResponse;
-import EHRAssist.dto.response.observationResponse.*;
+import EHRAssist.dto.response.PatientObservationResponse;
+import EHRAssist.dto.response.patientObservationResponse.*;
 import EHRAssist.repository.EHRAssistQueryDao.ObservationDao;
 import EHRAssist.repository.PersonRepository;
 import jakarta.persistence.Query;
@@ -23,8 +23,8 @@ public class ObservationServiceImpl {
     @Autowired
     private PersonRepository personRepository;
 
-    public PersonObservationResponse getPersonObservations(ObservationRequest request, Pageable page) {
-        PersonObservationResponse observationResponse = new PersonObservationResponse();
+    public PatientObservationResponse getPersonObservations(ObservationRequest request, Pageable page) {
+        PatientObservationResponse observationResponse = new PatientObservationResponse();
         String nativeQuery = observationDao.getNativeObservationQuery(request);
         Query query = observationDao.setValueToNativeObservationQuery(nativeQuery, request);
         List<Object[]> resultList = query.getResultList();

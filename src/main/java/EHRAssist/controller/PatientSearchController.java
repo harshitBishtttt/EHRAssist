@@ -1,10 +1,9 @@
 package EHRAssist.controller;
 
-import EHRAssist.dto.request.ObservationRequest;
+import EHRAssist.dto.response.PatientConditionResponse;
 import EHRAssist.dto.response.PatientSearchResponse;
-import EHRAssist.dto.response.PersonObservationResponse;
-import EHRAssist.service.impls.ObservationServiceImpl;
-import EHRAssist.service.impls.PatientSearchServiceImpl;
+import EHRAssist.service.PatientConditionService;
+import EHRAssist.service.PatientSearchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -14,20 +13,16 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 
 @RestController
-@RequestMapping("/baseR4/Patient")
+@RequestMapping("/baseR4")
 public class PatientSearchController {
 
     @Autowired
-    private PatientSearchServiceImpl patientService;
+    private PatientSearchService patientSearchService;
     @Autowired
-    private ObservationServiceImpl observationsService;
+    private PatientConditionService patientConditionService;
 
-//    @GetMapping
-//    ResponseEntity<PatientSearchResponse> searchPatientByEmail(@RequestParam String email, Pageable pageable) {
-//        return ResponseEntity.ok(patientService.searchPatientByEmail(email, pageable));
-//    }
 
-    @GetMapping
+    @GetMapping("/Patient")
     ResponseEntity<PatientSearchResponse> searchPatient(
             @RequestParam(required = false, defaultValue = "") String family,
             @RequestParam(required = false, defaultValue = "") String given,
@@ -38,14 +33,27 @@ public class PatientSearchController {
             Pageable pageable
     ) {
         return ResponseEntity.ok(
-                patientService.searchPatient(family, given, email, birthdate, gender, pageable)
+                patientSearchService.searchPatient(family, given, email, birthdate, gender, pageable)
         );
     }
 
-    @PostMapping("/person-observation")
-    ResponseEntity<PersonObservationResponse> getPersonObservations(@RequestBody ObservationRequest request, Pageable pageable) {
-        return ResponseEntity.ok(observationsService.getPersonObservations(request, pageable));
+    @GetMapping("/Condition")
+    ResponseEntity<PatientConditionResponse> getPersonCondition(
+            @RequestParam(required = false, defaultValue = "") Integer subject,
+            @RequestParam(required = false, defaultValue = "") String code,
+            @RequestParam(required = false) Integer encounter,
+            Pageable pageable
+    ) {
+        return ResponseEntity.ok(
+                patientConditionService.getPersonCondition(subject, code, encounter, pageable)
+        );
     }
+
+
+//    @PostMapping("/person-observation")
+//    ResponseEntity<PersonObservationResponse> getPersonObservations(@RequestBody ObservationRequest request, Pageable pageable) {
+//        return ResponseEntity.ok(observationsService.getPersonObservations(request, pageable));
+//    }
 
 
 }

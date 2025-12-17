@@ -22,7 +22,7 @@ public class PatientConditionServiceImpl implements PatientConditionService {
     private PersonConditionRepository personConditionRepository;
 
 
-    public PatientConditionResponse getPersonCondition(Integer subject,
+    public PatientConditionResponse getPatientCondition(Integer subject,
                                                        String code,
                                                        Integer encounter,
                                                        Pageable pageable) {

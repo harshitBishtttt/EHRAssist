@@ -1,8 +1,11 @@
 package EHRAssist.controller;
 
 import EHRAssist.dto.response.PatientConditionResponse;
+import EHRAssist.dto.response.PatientObservationResponse;
+import EHRAssist.dto.response.PatientProcedureResponse;
 import EHRAssist.dto.response.PatientSearchResponse;
 import EHRAssist.service.PatientConditionService;
+import EHRAssist.service.PatientProceduresService;
 import EHRAssist.service.PatientSearchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -20,6 +23,8 @@ public class PatientSearchController {
     private PatientSearchService patientSearchService;
     @Autowired
     private PatientConditionService patientConditionService;
+    @Autowired
+    private PatientProceduresService patientProceduresService;
 
 
     @GetMapping("/Patient")
@@ -38,22 +43,26 @@ public class PatientSearchController {
     }
 
     @GetMapping("/Condition")
-    ResponseEntity<PatientConditionResponse> getPersonCondition(
+    ResponseEntity<PatientConditionResponse> getPatientCondition(
             @RequestParam(required = false, defaultValue = "") Integer subject,
             @RequestParam(required = false, defaultValue = "") String code,
             @RequestParam(required = false) Integer encounter,
             Pageable pageable
     ) {
         return ResponseEntity.ok(
-                patientConditionService.getPersonCondition(subject, code, encounter, pageable)
+                patientConditionService.getPatientCondition(subject, code, encounter, pageable)
         );
     }
 
 
-//    @PostMapping("/person-observation")
-//    ResponseEntity<PersonObservationResponse> getPersonObservations(@RequestBody ObservationRequest request, Pageable pageable) {
-//        return ResponseEntity.ok(observationsService.getPersonObservations(request, pageable));
-//    }
+    @GetMapping("/Procedure")
+    ResponseEntity<PatientProcedureResponse> getPatientProcedure(
+            @RequestParam(required = false) Integer subject,
+            @RequestParam(required = false) Integer encounter,
+            @RequestParam(required = false) Integer code,
+            Pageable pageable) {
+        return ResponseEntity.ok(patientProceduresService.getPatientProcedure(subject, encounter, code, pageable));
+    }
 
 
 }

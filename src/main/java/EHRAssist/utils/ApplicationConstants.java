@@ -1,4 +1,4 @@
-package EHRAssist.eHRAUtils;
+package EHRAssist.utils;
 
 
 public class ApplicationConstants {

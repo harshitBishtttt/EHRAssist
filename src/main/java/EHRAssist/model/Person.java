@@ -89,12 +89,12 @@ public class Person {
     private List<Extension> extensions;
 
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(
-            name = "subject_id_from_person_table",
-            referencedColumnName = "subject_id" // <-- use this column in Person
-    )
-    private List<PersonLanguage> personLanguages;
+//    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+//    @JoinColumn(
+//            name = "subject_id_from_person_table",
+//            referencedColumnName = "subject_id" // <-- use this column in Person
+//    )
+//    private List<PersonLanguage> personLanguages;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(

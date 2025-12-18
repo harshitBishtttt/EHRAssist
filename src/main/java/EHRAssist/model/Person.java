@@ -53,11 +53,7 @@ public class Person {
     @Column(name = "birth_date")
     private LocalDate birthdate;
 
-    @Column(name = "marital_code")
-    private String maritalCode;
 
-    @Column(name = "marital_status")
-    private String maritalStatus;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(

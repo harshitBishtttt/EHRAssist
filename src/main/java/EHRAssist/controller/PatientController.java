@@ -1,10 +1,11 @@
 package EHRAssist.controller;
 
 import EHRAssist.dto.response.PatientConditionResponse;
-import EHRAssist.dto.response.PatientObservationResponse;
+import EHRAssist.dto.response.PatientEncounterResponse;
 import EHRAssist.dto.response.PatientProcedureResponse;
 import EHRAssist.dto.response.PatientSearchResponse;
 import EHRAssist.service.PatientConditionService;
+import EHRAssist.service.PatientEncounterService;
 import EHRAssist.service.PatientProceduresService;
 import EHRAssist.service.PatientSearchService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,7 @@ import java.time.LocalDate;
 
 @RestController
 @RequestMapping("/baseR4")
-public class PatientSearchController {
+public class PatientController {
 
     @Autowired
     private PatientSearchService patientSearchService;
@@ -25,6 +26,8 @@ public class PatientSearchController {
     private PatientConditionService patientConditionService;
     @Autowired
     private PatientProceduresService patientProceduresService;
+    @Autowired
+    private PatientEncounterService patientEncounterService;
 
 
     @GetMapping("/Patient")
@@ -62,6 +65,14 @@ public class PatientSearchController {
             @RequestParam(required = false) Integer code,
             Pageable pageable) {
         return ResponseEntity.ok(patientProceduresService.getPatientProcedure(subject, encounter, code, pageable));
+    }
+
+    @GetMapping("/Encounter")
+    ResponseEntity<PatientEncounterResponse> getPatientEncounter(
+            @RequestParam(required = false) Integer subject,
+            @RequestParam(required = false) Integer count,
+            Pageable pageable) {
+        return ResponseEntity.ok(patientEncounterService.getPatientEncounter(subject, count, pageable));
     }
 
 

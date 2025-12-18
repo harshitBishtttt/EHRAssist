@@ -3,6 +3,7 @@ package EHRAssist.service.impls;
 import EHRAssist.dto.response.PatientSearchResponse;
 import EHRAssist.dto.response.patientSearchResponse.*;
 import EHRAssist.model.Person;
+import EHRAssist.model.VisitAdmissions;
 import EHRAssist.repository.PersonRepository;
 import EHRAssist.service.PatientSearchService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,30 +62,26 @@ public class PatientSearchServiceImpl implements PatientSearchService {
                         .postalCode(ittr.getPostalCode()).build();
             }).toList());
         }
-
-        resource.setMaritalStatus(MaritalStatus.builder()
-                .text(!ObjectUtils.isEmpty(person.getMaritalStatus()) ?
-                        person.getMaritalStatus().toUpperCase(Locale.ROOT) : "")
-                .coding(Collections.singletonList(Coding.builder().code(person.getMaritalCode())
-                        .display(person.getMaritalStatus())
-                        .system("http://terminology.hl7.org/CodeSystem/v3-MaritalStatus")
-                        .build())).build());
-
-        if (!ObjectUtils.isEmpty(person.getPersonLanguages())) {
-            resource.setCommunication(person.getPersonLanguages().stream().map(ittr -> {
-                Communication communication = new Communication();
-                Language language = Language.builder().text(!ObjectUtils.isEmpty(ittr.getLanguageName())
-                                ? ittr.getLanguageName().toUpperCase(Locale.ROOT) : "")
-                        .coding(Collections.singletonList(Coding.builder()
-                                .system("urn:ietf:bcp:47")
-                                .code(ittr.getLanguageCode())
-                                .display(ittr.getLanguageName())
-                                .build())).build();
-                communication.setLanguage(language);
-                communication.setPreferred(ittr.getActive());
-                return communication;
-            }).toList());
+        VisitAdmissions visitAdmissions = person.getVisitAdmissions();
+        if(!ObjectUtils.isEmpty(visitAdmissions)){
+            resource.setMaritalStatus(MaritalStatus.builder()
+                    .text(visitAdmissions.getMaritalStatus())
+                    .coding(Collections.singletonList(Coding.builder().code(String.valueOf(visitAdmissions.getMaritalStatus().charAt(0)))
+                            .display(visitAdmissions.getMaritalStatus())
+                            .system("http://terminology.hl7.org/CodeSystem/v3-MaritalStatus")
+                            .build())).build());
+            Communication communication = new Communication();
+            Language language = Language.builder().text(visitAdmissions.getLanguage())
+                    .coding(Collections.singletonList(Coding.builder()
+                            .system("urn:ietf:bcp:47")
+                            .code(visitAdmissions.getLanguage())
+                            .display(visitAdmissions.getLanguage())
+                            .build())).build();
+            communication.setLanguage(language);
+            communication.setPreferred(true);
+            resource.setCommunication(List.of(communication));
         }
+
         return resource;
     }
 

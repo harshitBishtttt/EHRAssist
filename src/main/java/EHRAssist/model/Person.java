@@ -96,4 +96,13 @@ public class Person {
     )
     private List<PersonLanguage> personLanguages;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(
+            name = "subject_id",          // FK column
+            referencedColumnName = "subject_id",
+            insertable = false,
+            updatable = false
+    )
+    private VisitAdmissions visitAdmissions;
+
 }

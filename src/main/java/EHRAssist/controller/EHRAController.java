@@ -18,7 +18,7 @@ import java.time.LocalDate;
 
 @RestController
 @RequestMapping("/baseR4")
-public class PatientController {
+public class EHRAController {
 
     @Autowired
     private PatientSearchService patientSearchService;

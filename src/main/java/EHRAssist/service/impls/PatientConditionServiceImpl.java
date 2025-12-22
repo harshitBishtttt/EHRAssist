@@ -43,6 +43,7 @@ public class PatientConditionServiceImpl implements PatientConditionService {
                 Entry entryObj = new Entry();
                 entryObj.setFullUrl("/baseR4/Condition/" + ittr.getConditionMaster().getIcd9Code());
                 entryObj.setResource(Resource.builder()
+                                .resourceType("Condition")
                         .meta(EntryMeta.builder().lastUpdate(null).source(null).versionId(null).build())
                         .clinicalStatus(ClinicalStatus.builder().build())
                         .verificationStatus(VerificationStatus.builder().build())

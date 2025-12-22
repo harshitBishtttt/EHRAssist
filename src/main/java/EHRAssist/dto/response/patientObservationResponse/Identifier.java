@@ -1,6 +1,5 @@
 package EHRAssist.dto.response.patientObservationResponse;
 
-import EHRAssist.dto.response.personProcedureResponse.Search;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,8 +9,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Entry {
-    private String fullUrl;
-    private Resource resource;
-    private Search search;
+public class Identifier {
+    String use;
+    String type;
+    String system;
+    String value;
 }

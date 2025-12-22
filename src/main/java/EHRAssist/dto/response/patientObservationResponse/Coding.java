@@ -12,5 +12,5 @@ import lombok.NoArgsConstructor;
 public class Coding {
     private String system;
     private String code;
-    private String text;
+    private String display;
 }

@@ -7,4 +7,6 @@ public interface PatientEncounterService {
     PatientEncounterResponse getPatientEncounter(Integer subject, Integer count,
                                                  Pageable pageable);
 
+
+
 }

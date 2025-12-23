@@ -14,6 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 public class PatientObservationResponse {
     private String resourceType;
+    private String id;
     private String type;
     private Integer total;
     List<Entry> entry;

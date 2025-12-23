@@ -1,6 +1,6 @@
 package EHRAssist.dto.response.patientObservationResponse;
 
-import EHRAssist.dto.response.personProcedureResponse.Category;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

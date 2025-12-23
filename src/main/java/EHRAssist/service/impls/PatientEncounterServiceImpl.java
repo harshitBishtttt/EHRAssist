@@ -42,6 +42,7 @@ public class PatientEncounterServiceImpl implements PatientEncounterService {
         PatientEncounterResponse response = new PatientEncounterResponse();
         Optional<List<VisitAdmissions>> bySubjectId = patientEncounterRepository.findBySubjectId(subjectId);
         if (bySubjectId.isPresent()) {
+            response.setId(subjectId.toString());
             List<VisitAdmissions> visitAdmissions = bySubjectId.get();
             List<Entry> entries = visitAdmissions.stream().map(ittr -> {
                 Entry entry = new Entry();

@@ -33,13 +33,13 @@ public class EHRAController {
             @RequestParam(required = false, defaultValue = "") String family,
             @RequestParam(required = false, defaultValue = "") String given,
             @RequestParam(required = false, defaultValue = "") String email,
-            @RequestParam(required = false)
+            @RequestParam(required = false) String phone,
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate birthdate,
             @RequestParam(required = false, defaultValue = "") String gender,
             Pageable pageable
     ) {
         return ResponseEntity.ok(
-                patientSearchService.searchPatient(family, given, email, birthdate, gender, pageable)
+                patientSearchService.searchPatient(family, given, email, phone, birthdate, gender, pageable)
         );
     }
 

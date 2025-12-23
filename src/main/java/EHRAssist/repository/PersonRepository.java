@@ -25,11 +25,16 @@ public interface PersonRepository extends JpaRepository<Person, Short> {
                         :email IS NULL OR :email = '' 
                         OR (pt.system = 'email' AND pt.value = :email)
                       )
+                  And (
+                        :phone IS NULL OR :phone = '' 
+                        OR (pt.system = 'phone' AND pt.value = :phone)
+                      )
             """)
     Optional<List<Person>> searchPerson(
             @Param("family") String family,
             @Param("given") String given,
             @Param("email") String email,
+            @Param("phone") String phone,
             @Param("birthdate") LocalDate birthdate,
             @Param("gender") String gender
     );

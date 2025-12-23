@@ -12,5 +12,4 @@ import lombok.NoArgsConstructor;
 public class TelecomResponse {
     private String system;
     private String value;
-    private String use;
 }

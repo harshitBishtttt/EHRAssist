@@ -11,6 +11,7 @@ public interface PatientSearchService {
     PatientSearchResponse searchPatient(String family,
                                         String given,
                                         String email,
+                                        String phone,
                                         LocalDate birthdate,
                                         String gender,
                                         Pageable pageable);

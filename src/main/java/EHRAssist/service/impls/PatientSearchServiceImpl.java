@@ -46,7 +46,6 @@ public class PatientSearchServiceImpl implements PatientSearchService {
             resource.setTelecom(person.getPersonTelecom().stream().map(ittr -> {
                 return TelecomResponse.builder()
                         .system(ittr.getSystem())
-                        .use(ittr.getUseTel())
                         .value(ittr.getValue())
                         .build();
             }).toList());
@@ -63,11 +62,16 @@ public class PatientSearchServiceImpl implements PatientSearchService {
             }).toList());
         }
         VisitAdmissions visitAdmissions = person.getVisitAdmissions();
-        if(!ObjectUtils.isEmpty(visitAdmissions)){
+        if (!ObjectUtils.isEmpty(visitAdmissions)) {
             resource.setMaritalStatus(MaritalStatus.builder()
                     .text(visitAdmissions.getMaritalStatus())
-                    .coding(Collections.singletonList(Coding.builder().code(String.valueOf(visitAdmissions.getMaritalStatus().charAt(0)))
-                            .display(visitAdmissions.getMaritalStatus())
+                    .coding(Collections.singletonList(Coding.builder()
+                            .code(String.valueOf(!ObjectUtils.isEmpty(visitAdmissions) ||
+                                    !ObjectUtils.isEmpty(visitAdmissions.getMaritalStatus()) ?
+                                    visitAdmissions.getMaritalStatus() : ""))
+                            .display(!ObjectUtils.isEmpty(visitAdmissions) ||
+                                    !ObjectUtils.isEmpty(visitAdmissions.getMaritalStatus())
+                                    ? visitAdmissions.getMaritalStatus() : "")
                             .system("http://terminology.hl7.org/CodeSystem/v3-MaritalStatus")
                             .build())).build());
             Communication communication = new Communication();
@@ -88,12 +92,14 @@ public class PatientSearchServiceImpl implements PatientSearchService {
     public PatientSearchResponse searchPatient(String family,
                                                String given,
                                                String email,
+                                               String phone,
                                                LocalDate birthdate,
                                                String gender,
                                                Pageable pageable) {
         PatientSearchResponse searchResponse = new PatientSearchResponse();
+        searchResponse.setId(UUID.randomUUID().toString());
         Optional<List<Person>> getPersons = personRepository
-                .searchPerson(family, given, email, birthdate, gender);
+                .searchPerson(family, given, email, phone, birthdate, gender);
         searchResponse.setResourceType("Bundle");
         searchResponse.setMeta(Meta.builder().lastUpdated(String.valueOf(LocalDateTime.now())).build());
         searchResponse.setType("searchset");

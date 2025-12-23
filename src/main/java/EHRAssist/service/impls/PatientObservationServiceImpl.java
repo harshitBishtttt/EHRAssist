@@ -57,6 +57,7 @@ public class PatientObservationServiceImpl implements PatientObservationService 
             response.setTotal(latestMeasurements.size());
             response.setType("Bundle");
             response.setId(subject.toString());
+            response.setResourceType("Bundle");
         }
         return response;
     }

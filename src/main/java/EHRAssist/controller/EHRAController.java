@@ -43,7 +43,7 @@ public class EHRAController {
 
     @GetMapping("/Condition")
     ResponseEntity<PatientConditionResponse> getPatientCondition(
-            Integer subject,
+            @RequestParam Integer subject,
             @RequestParam(required = false, defaultValue = "") String code,
             @RequestParam(required = false) Integer encounter,
             Pageable pageable
@@ -56,7 +56,7 @@ public class EHRAController {
 
     @GetMapping("/Procedure")
     ResponseEntity<PatientProcedureResponse> getPatientProcedure(
-            Integer subject,
+            @RequestParam Integer subject,
             @RequestParam(required = false) Integer encounter,
             @RequestParam(required = false) Integer code,
             Pageable pageable) {
@@ -65,7 +65,7 @@ public class EHRAController {
 
     @GetMapping("/Encounter")
     ResponseEntity<PatientEncounterResponse> getPatientEncounter(
-            Integer subject,
+            @RequestParam Integer subject,
             @RequestParam(required = false) Integer count,
             Pageable pageable) {
         return ResponseEntity.ok(patientEncounterService.getPatientEncounter(subject, count, pageable));
@@ -73,12 +73,17 @@ public class EHRAController {
 
     @GetMapping("/Observations")
     ResponseEntity<PatientObservationResponse> getPatientObservations(
-            Integer subject,
+            @RequestParam Integer subject,
             @RequestParam(required = false) Integer patient,
             @RequestParam(required = false) String code,
             @RequestParam(required = false) Integer encounter,
             Pageable pageable) {
         return ResponseEntity.ok(getPatientObservations.getPatientObservations(subject, code, encounter, pageable));
+    }
+
+    @GetMapping
+    ResponseEntity<PatientPrescriptionResponse> getPatientPrescription(Integer subject) {
+        return null;
     }
 
 

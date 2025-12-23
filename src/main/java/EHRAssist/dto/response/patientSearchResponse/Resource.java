@@ -17,7 +17,7 @@ public class Resource {
     private Integer id;
     private EntryMeta meta;
     private Text text;
-    private List<Extension> extension;
+    private Boolean active;
     private List<NameResponse> name;
     private List<TelecomResponse> telecom;
     private String gender;
@@ -25,6 +25,7 @@ public class Resource {
     private List<Address> address;
     private MaritalStatus maritalStatus;
     private List<Communication> communication;
+    private List<Extension> extension;
 
 
 }

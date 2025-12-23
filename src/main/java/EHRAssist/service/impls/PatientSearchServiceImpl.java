@@ -24,6 +24,7 @@ public class PatientSearchServiceImpl implements PatientSearchService {
         Resource resource = new Resource();
         resource.setResourceType("Patient");
         resource.setId(person.getSubjectId());
+        resource.setActive(person.getDod().isAfter(LocalDateTime.now()));
         resource.setMeta(EntryMeta.builder()
                 .lastUpdated(String.valueOf(person.getLoadedAt()))
                 .source("#SPMeDNKMZT33s52w")

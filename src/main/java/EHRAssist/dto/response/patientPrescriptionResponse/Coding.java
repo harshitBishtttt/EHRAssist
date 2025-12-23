@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class DoseAndRate {
-    DoseQuantity doseQuantity;
+public class Coding {
+    private String system;
+    private String code;
+    private String display;
 }

@@ -16,6 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 public class PatientPrescriptionResponse {
     private String resourceType;
+    private String id;
     private String type;
     private Meta meta;
     private Integer total;

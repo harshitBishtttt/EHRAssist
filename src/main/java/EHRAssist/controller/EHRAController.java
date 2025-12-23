@@ -24,6 +24,8 @@ public class EHRAController {
     private PatientEncounterService patientEncounterService;
     @Autowired
     private PatientObservationService getPatientObservations;
+    @Autowired
+    private PatientPrescriptionService patientPrescriptionService;
 
 
     @GetMapping("/Patient")
@@ -81,9 +83,10 @@ public class EHRAController {
         return ResponseEntity.ok(getPatientObservations.getPatientObservations(subject, code, encounter, pageable));
     }
 
-    @GetMapping
-    ResponseEntity<PatientPrescriptionResponse> getPatientPrescription(Integer subject) {
-        return null;
+    @GetMapping("/MedicationRequest")
+    ResponseEntity<PatientPrescriptionResponse> getPatientPrescription(@RequestParam Integer subject,
+                                                                       @RequestParam(required = false) Integer prescriptionId) {
+        return ResponseEntity.ok(patientPrescriptionService.getPatientPrescription(subject, prescriptionId));
     }
 
 

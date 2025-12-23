@@ -51,6 +51,8 @@ public class PatientProceduresServiceImpls implements PatientProceduresService {
             return obj;
         }).toList();
         response.setEntry(entry);
+        response.setId(subject.toString());
+        response.setTotal(entry.size());
         return response;
     }
 

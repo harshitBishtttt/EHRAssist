@@ -74,6 +74,8 @@ public class PatientPrescriptionServiceImpl implements PatientPrescriptionServic
                 return Entry.builder().fullUrl("").resource(getResourceType(ittr))
                         .search(Search.builder().mode("matched").build()).build();
             }).toList();
+            response.setResourceType("Bundle");
+            response.setType("searchset");
             response.setEntry(entryList);
         }
         return response;

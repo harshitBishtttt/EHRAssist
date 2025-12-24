@@ -40,7 +40,7 @@ public class PatientSearchServiceImpl implements PatientSearchService {
             resource.setName(person.getPersonName().stream().map(ittr -> {
                 return NameResponse.builder()
                         .use("official")
-                        .given(Arrays.asList(ittr.getFirstName(), ittr.getLastName()))
+                        .given(Arrays.asList(ittr.getFirstName(), ittr.getMiddleName()))
                         .family(ittr.getLastName()).build();
             }).toList());
         }

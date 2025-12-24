@@ -21,7 +21,15 @@ public class PatientObservationServiceImpl implements PatientObservationService 
     @Autowired
     private PersonMeasurementRepository personMeasurementRepository;
 
-    Resource resourceMapper(Object[] ittr) {
+    static String toVitalSignsCode(String input) {
+        return input == null
+                ? null
+                : input.trim()
+                .toLowerCase()
+                .replaceAll("\\s+", "-");
+    }
+
+    private Resource resourceMapper(Object[] ittr) {
         Resource resource = new Resource();
         resource.setResourceType("Observation");
         resource.setId(ittr[0].toString());
@@ -32,6 +40,8 @@ public class PatientObservationServiceImpl implements PatientObservationService 
         resource.setText(Text.builder()
                 .div("<div xmlns=\"http://www.w3.org/1999/xhtml\">" + ittr[9] + " observation (no performer)</div>")
                 .status("generated").build());
+        resource.setIdentifier(Identifier.builder().system("http://hospital.example.org/observations")
+                .value("BP-2025-0002").build());
         Component c = new Component();
         Code coding = Code.builder().coding(List.of(Coding.builder()
                 .code(!ObjectUtils.isEmpty(ittr[12]) ? (String) ittr[12] : "")
@@ -42,12 +52,13 @@ public class PatientObservationServiceImpl implements PatientObservationService 
                 .value(!ObjectUtils.isEmpty(ittr[6]) ? (double) ittr[6] : 0.0)
                 .unit((String) ittr[7]).code("/" + (String) ittr[7]).system("http://unitsofmeasure.org").build());
         resource.setComponent(List.of(c));
+        String s = (String) ittr[10];
         resource.setCategory(Category.builder()
                 .coding(List.of(Coding.builder()
-                        .system("")
-                        .code((String) ittr[10])
-                        .display((String) ittr[9]).build())).build());
-        resource.setStatus("Final");
+                        .system("http://terminology.hl7.org/CodeSystem/observation-category")
+                        .code(toVitalSignsCode((String) ittr[9]))
+                        .display((String) ittr[9]).build())).text((String) ittr[9]).build());
+        resource.setStatus("final");
         return resource;
     }
 
@@ -62,7 +73,7 @@ public class PatientObservationServiceImpl implements PatientObservationService 
         if (!latestMeasurements.isEmpty()) {
             response.setEntry(latestMeasurements.stream().map(ittr -> {
                 return Entry.builder().resource(resourceMapper(ittr))
-                        .fullUrl("10.131.58.59:481/baseR4/Observation" + subject).search(Search.builder()
+                        .fullUrl("10.131.58.59:481/baseR4/Observation/" + subject).search(Search.builder()
                                 .mode("matched").build()).build();
             }).toList());
             response.setTotal(latestMeasurements.size());

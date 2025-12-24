@@ -10,8 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Identifier {
-    String use;
-    String type;
     String system;
     String value;
 }

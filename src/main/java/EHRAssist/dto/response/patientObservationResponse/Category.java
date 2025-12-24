@@ -14,4 +14,5 @@ import java.util.List;
 @AllArgsConstructor
 public class Category {
     private List<Coding> coding;
+    private String text;
 }

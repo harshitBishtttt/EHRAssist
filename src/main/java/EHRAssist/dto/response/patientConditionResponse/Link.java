@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Link {
-    String url;
-    String relation;
+    private String relation;
+    private String url;
 }

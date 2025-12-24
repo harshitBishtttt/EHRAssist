@@ -28,6 +28,6 @@ public class Resource {
     private List<Interpretation> interpretation;
     private List<Note> note;
     private BodySite bodySite;
-    private Device device;
+    private Method method;
     private List<Component> component;
 }

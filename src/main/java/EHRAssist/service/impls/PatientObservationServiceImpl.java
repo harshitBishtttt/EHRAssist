@@ -43,14 +43,15 @@ public class PatientObservationServiceImpl implements PatientObservationService 
         resource.setIdentifier(Identifier.builder().system("http://hospital.example.org/observations")
                 .value("BP-2025-0002").build());
         Component c = new Component();
+        String lable = !ObjectUtils.isEmpty(ittr[9]) ? (String) ittr[9] : "";
         Code coding = Code.builder().coding(List.of(Coding.builder()
                 .code(!ObjectUtils.isEmpty(ittr[12]) ? (String) ittr[12] : "")
-                .display("http://loinc.org")
-                .system(!ObjectUtils.isEmpty(ittr[9]) ? (String) ittr[9] : "").build())).build();
+                .system("http://loinc.org")
+                .display(lable).build())).text(lable).build();
         c.setCode(coding);
         c.setValueQuantity(ValueQuantity.builder()
                 .value(!ObjectUtils.isEmpty(ittr[6]) ? (double) ittr[6] : 0.0)
-                .unit((String) ittr[7]).code("/" + (String) ittr[7]).system("http://unitsofmeasure.org").build());
+                .unit((String) ittr[7]).code("" + (String) ittr[7]).system("http://unitsofmeasure.org").build());
         resource.setComponent(List.of(c));
         String s = (String) ittr[10];
         resource.setCategory(Category.builder()
@@ -75,6 +76,10 @@ public class PatientObservationServiceImpl implements PatientObservationService 
                 .system("http://snomed.info/sct")
                 .code("368209003")
                 .display("Right arm").build())).build());
+        resource.setMethod(Method.builder().coding(List.of(Coding.builder()
+                .display("anual sphygmomanometer")
+                .code("6525385")
+                .system("http://snomed.info/sct").build())).build());
 
         resource.setStatus("final");
         return resource;

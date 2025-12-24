@@ -39,8 +39,8 @@ public class PatientSearchServiceImpl implements PatientSearchService {
         if (!ObjectUtils.isEmpty(person.getPersonName())) {
             resource.setName(person.getPersonName().stream().map(ittr -> {
                 return NameResponse.builder()
-                        .use(ittr.getFirstName())
-                        .given(Arrays.asList(ittr.getMiddleName(), ittr.getLastName()))
+                        .use("official")
+                        .given(Arrays.asList(ittr.getFirstName(), ittr.getLastName()))
                         .family(ittr.getLastName()).build();
             }).toList());
         }

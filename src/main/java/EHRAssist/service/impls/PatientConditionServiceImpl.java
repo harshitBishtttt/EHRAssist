@@ -7,19 +7,16 @@ import EHRAssist.model.ConditionMaster;
 import EHRAssist.model.PersonCondition;
 import EHRAssist.repository.PersonConditionRepository;
 import EHRAssist.service.PatientConditionService;
-import EHRAssist.utils.ApplicationConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static EHRAssist.utils.ApplicationConstants.CONDITION_SYSTEM;
-import static EHRAssist.utils.ApplicationConstants.CONDITION_URL;
+import static EHRAssist.utils.ApplicationConstants.*;
 
 @Service
 public class PatientConditionServiceImpl implements PatientConditionService {
@@ -41,8 +38,9 @@ public class PatientConditionServiceImpl implements PatientConditionService {
         response.setResourceType("Bundle");
         response.setMeta(Meta.builder().lastUpdated(String.valueOf(LocalDateTime.now())).build());
         response.setType("searchset");
-        response.setLink(Collections.singletonList(Link.builder()
-                .url(CONDITION_URL).relation("self").build()));
+        response.setLink(List.of(Link.builder()
+                .url(CONDITION_URL_1).relation("self").build(), Link.builder()
+                .url(CONDITION_URL_2).relation("next").build()));
         List<Entry> enry = null;
         if (personConditions.isPresent()) {
             List<PersonCondition> conditions = personConditions.get();
@@ -51,31 +49,31 @@ public class PatientConditionServiceImpl implements PatientConditionService {
             enry = conditions.stream().map(ittr -> {
                 Entry entryObj = new Entry();
                 ConditionMaster conditionMaster = ittr.getConditionMaster();
-                entryObj.setFullUrl(CONDITION_URL);
+                entryObj.setFullUrl(CONDITION_URL_1);
                 entryObj.setResource(Resource.builder()
                         .resourceType("Condition")
                         .clinicalStatus(ClinicalStatus.builder().build())
                         .verificationStatus(VerificationStatus.builder().build())
                         .id(ittr.getRowId())
                         .meta(EntryMeta.builder().versionId("1").source("#II7YGAcYPBuLlrB3")
-                                .lastUpdate(String.valueOf(LocalDateTime.now())).build())
+                                .lastUpdated(String.valueOf(LocalDateTime.now())).build())
                         .clinicalStatus(ClinicalStatus.builder().coding(List.of(Coding.builder()
-                                .code("")
+                                .code("active")
                                 .system("http://terminology.hl7.org/CodeSystem/condition-clinical")
-                                .display("").build())).build())
+                                .display("Active").build())).build())
                         .verificationStatus(VerificationStatus.builder().coding(List.of(Coding.builder()
-                                .code("")
+                                .code("confirmed")
                                 .system("http://terminology.hl7.org/CodeSystem/condition-ver-status")
-                                .display("").build())).build())
+                                .display("Confirmed").build())).build())
                         .severity(Severity.builder().coding(List.of(Coding.builder()
-                                .code("")
+                                .code("24484000")
                                 .system("http://snomed.info/sct")
-                                .display("").build())).build())
-                        .category(Category.builder()
+                                .display("Severe").build())).build())
+                        .category(List.of(Category.builder()
                                 .coding(List.of(Coding.builder()
                                         .system(CONDITION_SYSTEM)
                                         .display(!ObjectUtils.isEmpty(conditionMaster) ? conditionMaster.getShortTitle() : "")
-                                        .code(!ObjectUtils.isEmpty(conditionMaster) ? conditionMaster.getIcd9Code() : "").build())).build())
+                                        .code(!ObjectUtils.isEmpty(conditionMaster) ? conditionMaster.getIcd9Code() : "").build())).build()))
                         .encounter(Encounter.builder()
                                 .reference("Encounter/" + ittr.getHadmId()).build())
                         .subject(Subject.builder()

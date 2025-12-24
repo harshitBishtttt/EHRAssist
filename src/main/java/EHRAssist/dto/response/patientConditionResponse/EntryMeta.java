@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class EntryMeta {
     private String versionId;
-    private String lastUpdate;
+    private String lastUpdated;
     private String source;
 }

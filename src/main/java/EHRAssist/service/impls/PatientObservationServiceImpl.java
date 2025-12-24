@@ -1,6 +1,7 @@
 package EHRAssist.service.impls;
 
 import EHRAssist.dto.response.PatientObservationResponse;
+import EHRAssist.dto.response.patientConditionResponse.Link;
 import EHRAssist.dto.response.patientObservationResponse.*;
 import EHRAssist.dto.response.personProcedureResponse.Search;
 import EHRAssist.repository.PersonMeasurementRepository;
@@ -10,6 +11,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
@@ -19,8 +23,15 @@ public class PatientObservationServiceImpl implements PatientObservationService 
 
     Resource resourceMapper(Object[] ittr) {
         Resource resource = new Resource();
-        resource.setResourceType("Observations");
-        resource.setId((Integer) ittr[0]);
+        resource.setResourceType("Observation");
+        resource.setId(ittr[0].toString());
+        resource.setMeta(EntryMeta.builder().versionId("1").lastUpdated(OffsetDateTime.now(ZoneOffset.UTC)
+                        .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX")))
+                .profile(List.of("http://hl7.org/fhir/StructureDefinition/vitalsigns"))
+                .source("#wnzvyWyVXFVJbcHX").build());
+        resource.setText(Text.builder()
+                .div("<div xmlns=\"http://www.w3.org/1999/xhtml\">" + ittr[9] + " observation (no performer)</div>")
+                .status("generated").build());
         Component c = new Component();
         Code coding = Code.builder().coding(List.of(Coding.builder()
                 .code(!ObjectUtils.isEmpty(ittr[12]) ? (String) ittr[12] : "")
@@ -51,13 +62,19 @@ public class PatientObservationServiceImpl implements PatientObservationService 
         if (!latestMeasurements.isEmpty()) {
             response.setEntry(latestMeasurements.stream().map(ittr -> {
                 return Entry.builder().resource(resourceMapper(ittr))
-                        .fullUrl("").search(Search.builder()
+                        .fullUrl("10.131.58.59:481/baseR4/Observation" + subject).search(Search.builder()
                                 .mode("matched").build()).build();
             }).toList());
             response.setTotal(latestMeasurements.size());
-            response.setType("Bundle");
+            response.setType("searchset");
             response.setId(subject.toString());
             response.setResourceType("Bundle");
+            response.setMeta(Meta.builder().lastUpdated(OffsetDateTime.now(ZoneOffset.UTC)
+                    .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX"))).build());
+            response.setLink(Link.builder()
+                    .url("10.131.58.59:481/baseR4/Observation?code=" + code + "&subject=" + subject)
+                    .relation("self").build());
+
         }
         return response;
     }

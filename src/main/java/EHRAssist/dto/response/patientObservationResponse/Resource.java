@@ -15,8 +15,8 @@ import java.util.List;
 @AllArgsConstructor
 public class Resource {
     private String resourceType;
-    private Integer id;
-    private Meta meta;
+    private String id;
+    private EntryMeta meta;
     private Text text;
     private Identifier identifier;
     private String status;

@@ -1,6 +1,8 @@
 package EHRAssist.dto.response;
 
+import EHRAssist.dto.response.patientConditionResponse.Link;
 import EHRAssist.dto.response.patientObservationResponse.Entry;
+import EHRAssist.dto.response.patientObservationResponse.Meta;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,5 +19,7 @@ public class PatientObservationResponse {
     private String id;
     private String type;
     private Integer total;
+    private Meta meta;
+    private Link link;
     List<Entry> entry;
 }

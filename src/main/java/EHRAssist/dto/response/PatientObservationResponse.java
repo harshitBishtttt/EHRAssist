@@ -20,6 +20,6 @@ public class PatientObservationResponse {
     private String type;
     private Integer total;
     private Meta meta;
-    private Link link;
+    private List<Link> link;
     List<Entry> entry;
 }

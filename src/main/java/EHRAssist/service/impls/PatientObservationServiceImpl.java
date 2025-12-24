@@ -105,9 +105,9 @@ public class PatientObservationServiceImpl implements PatientObservationService 
             response.setResourceType("Bundle");
             response.setMeta(Meta.builder().lastUpdated(OffsetDateTime.now(ZoneOffset.UTC)
                     .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX"))).build());
-            response.setLink(Link.builder()
+            response.setLink(List.of(Link.builder()
                     .url("10.131.58.59:481/baseR4/Observation?code=" + code + "&subject=" + subject)
-                    .relation("self").build());
+                    .relation("self").build()));
 
         }
         return response;

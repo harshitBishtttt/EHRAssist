@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -23,9 +22,12 @@ public class Resource {
     private Category category;
     private Code code;
     private Subject subject;
-    private LocalDateTime effectiveDateTime;
-    private Note note;
+    private Encounter encounter;
+    private String effectiveDateTime;
+    private String issued;
+    private List<Interpretation> interpretation;
+    private List<Note> note;
+    private BodySite bodySite;
     private Device device;
     private List<Component> component;
-    private String encounter;
 }

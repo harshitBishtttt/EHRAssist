@@ -56,8 +56,26 @@ public class PatientObservationServiceImpl implements PatientObservationService 
         resource.setCategory(Category.builder()
                 .coding(List.of(Coding.builder()
                         .system("http://terminology.hl7.org/CodeSystem/observation-category")
-                        .code(toVitalSignsCode((String) ittr[9]))
-                        .display((String) ittr[9]).build())).text((String) ittr[9]).build());
+                        .code(toVitalSignsCode((String) ittr[10]))
+                        .display((String) ittr[10]).build())).text((String) ittr[10]).build());
+        resource.setCode(Code.builder().coding(List.of(Coding.builder().system("http://loinc.org")
+                .code((String) ittr[12]).display((String) ittr[9]).build())).text((String) ittr[9]).build());
+        resource.setSubject(Subject.builder().reference("Patient/" + ittr[1])
+                .display((String) ittr[13] + " " + (String) ittr[15]).build());
+        resource.setEncounter(Encounter.builder().reference("Encounter/567865").build());
+        resource.setEffectiveDateTime(OffsetDateTime.now(ZoneOffset.UTC)
+                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX")));
+        resource.setIssued(OffsetDateTime.now(ZoneOffset.UTC)
+                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX")));
+        resource.setInterpretation(List.of(Interpretation.builder()
+                .coding(List.of(Coding.builder().display("Normal").code("N")
+                        .system("http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation").build())).build()));
+        resource.setNote(List.of(Note.builder().text("Patient seated and rested for 5 minutes before measurement.").build()));
+        resource.setBodySite(BodySite.builder().coding(List.of(Coding.builder()
+                .system("http://snomed.info/sct")
+                .code("368209003")
+                .display("Right arm").build())).build());
+
         resource.setStatus("final");
         return resource;
     }

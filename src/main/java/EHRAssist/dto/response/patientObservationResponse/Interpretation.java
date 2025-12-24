@@ -11,7 +11,6 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Code {
-    private List<Coding> coding;
-    private String text;
+public class Interpretation {
+    List<Coding> coding;
 }

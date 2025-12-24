@@ -11,4 +11,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Subject {
     private String reference;
+    private String display;
 }

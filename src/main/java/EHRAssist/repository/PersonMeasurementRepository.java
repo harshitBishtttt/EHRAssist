@@ -28,17 +28,23 @@ public interface PersonMeasurementRepository extends JpaRepository<PersonMeasure
         lm.hadm_id,
         lm.itemid,
         lm.charttime,
-        lm.value,
+        COALESCE(lm.value, '')        AS value,
         lm.valuenum,
-        lm.valueuom,
-        lm.flag,
-        mm.label,
-        mm.category,
-        mm.fluid,
-        mm.loinc_code
+        COALESCE(lm.valueuom, '')     AS valueuom,
+        COALESCE(lm.flag, '')         AS flag,
+        COALESCE(mm.label, '')        AS label,
+        COALESCE(mm.category, '')     AS category,
+        COALESCE(mm.fluid, '')        AS fluid,
+        COALESCE(mm.loinc_code, '')   AS loinc_code,
+        COALESCE(pn.first_name, '')   AS first_name,
+        COALESCE(pn.middle_name, '')  AS middle_name,
+        COALESCE(pn.last_name, '')    AS last_name
     FROM LatestMeasurements lm
     LEFT JOIN UCIH.dbo.Measurement_master mm
            ON mm.itemid = lm.itemid
+    LEFT JOIN UCIH.dbo.Person_Name pn
+           ON pn.subject_id_from_person_table = lm.subject_id
+          AND pn.name_type = 'official'
     WHERE lm.rn = 1
       AND (
             :loincCode IS NULL
@@ -51,5 +57,6 @@ public interface PersonMeasurementRepository extends JpaRepository<PersonMeasure
             @Param("loincCode") String loincCode,
             @Param("encounter") Integer encounter
     );
+
 
 }

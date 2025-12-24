@@ -54,11 +54,11 @@ public class PatientObservationServiceImpl implements PatientObservationService 
                 .unit((String) ittr[7]).code("" + (String) ittr[7]).system("http://unitsofmeasure.org").build());
         resource.setComponent(List.of(c));
         String s = (String) ittr[10];
-        resource.setCategory(Category.builder()
+        resource.setCategory(List.of(Category.builder()
                 .coding(List.of(Coding.builder()
                         .system("http://terminology.hl7.org/CodeSystem/observation-category")
                         .code(toVitalSignsCode((String) ittr[10]))
-                        .display((String) ittr[10]).build())).text((String) ittr[10]).build());
+                        .display((String) ittr[10]).build())).text((String) ittr[10]).build()));
         resource.setCode(Code.builder().coding(List.of(Coding.builder().system("http://loinc.org")
                 .code((String) ittr[12]).display((String) ittr[9]).build())).text((String) ittr[9]).build());
         resource.setSubject(Subject.builder().reference("Patient/" + ittr[1])

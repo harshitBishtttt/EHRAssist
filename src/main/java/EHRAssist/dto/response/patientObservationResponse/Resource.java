@@ -19,7 +19,7 @@ public class Resource {
     private Text text;
     private Identifier identifier;
     private String status;
-    private Category category;
+    private List<Category> category;
     private Code code;
     private Subject subject;
     private Encounter encounter;

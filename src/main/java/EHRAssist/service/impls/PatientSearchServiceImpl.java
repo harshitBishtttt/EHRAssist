@@ -6,6 +6,7 @@ import EHRAssist.model.Person;
 import EHRAssist.model.VisitAdmissions;
 import EHRAssist.repository.PersonRepository;
 import EHRAssist.service.PatientSearchService;
+import EHRAssist.utils.ApplicationConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -29,7 +30,7 @@ public class PatientSearchServiceImpl implements PatientSearchService {
                 .lastUpdated(String.valueOf(person.getLoadedAt()))
                 .source("#SPMeDNKMZT33s52w")
                 .versionId("1").build());
-        resource.setText(Text.builder().build());
+        resource.setText(Text.builder().div(ApplicationConstants.DIV).status("generated").build());
         if (!ObjectUtils.isEmpty(person.getExtensions())) {
             resource.setExtension(person.getExtensions().stream().map(ittr -> {
                 return Extension.builder().valueString(ittr.getValueString()).url(ittr.getUrl()).build();
@@ -109,7 +110,7 @@ public class PatientSearchServiceImpl implements PatientSearchService {
             List<Person> people = getPersons.get();
             List<Entry> matched = people.stream().map(ittr -> {
                 return Entry.builder().fullUrl("https://hapi.fhir.org/baseR4/Patient/" + ittr.getSubjectId())
-                        .resource(resourceMapper(ittr)).mode(SearchResponse.builder().mode("matched").build()).build();
+                        .resource(resourceMapper(ittr)).search(SearchResponse.builder().mode("matched").build()).build();
             }).toList();
 
             searchResponse.setTotal(matched.size());
@@ -131,13 +132,13 @@ public class PatientSearchServiceImpl implements PatientSearchService {
             Person person = byPersonAddressEmail.get();
             entryObject.setFullUrl("https://hapi.fhir.org/baseR4/Patient/" + person.getSubjectId());
             entryObject.setResource(resourceMapper(person));
-            entryObject.setMode(SearchResponse.builder().mode("matched").build());
+            entryObject.setSearch(SearchResponse.builder().mode("matched").build());
             searchResponse.setId(String.valueOf(person.getRowId()));
             searchResponse.setTotal(1);
             searchResponse.setEntry(List.of(entryObject));
         } else {
             searchResponse.setTotal(0);
-            entryObject.setMode(SearchResponse.builder().mode("non-matched").build());
+            entryObject.setSearch(SearchResponse.builder().mode("non-matched").build());
         }
         return searchResponse;
     }

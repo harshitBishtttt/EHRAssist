@@ -3,8 +3,6 @@ package EHRAssist.service.impls;
 import EHRAssist.dto.response.PatientEncounterResponse;
 import EHRAssist.dto.response.patientConditionResponse.Link;
 import EHRAssist.dto.response.patientEncounterResponse.*;
-import EHRAssist.dto.response.patientEncounterResponse.Search;
-import EHRAssist.dto.response.patientEncounterResponse.Meta;
 import EHRAssist.model.VisitAdmissions;
 import EHRAssist.repository.PatientEncounterRepository;
 import EHRAssist.service.PatientEncounterService;
@@ -12,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,11 +33,21 @@ public class PatientEncounterServiceImpl implements PatientEncounterService {
         response.setType(ResourceType.builder().text(List.of(admissions.getAdmissionType())).build());
         response.setSubject(Subject.builder().identifier("Patient/" + admissions.getSubjectId()).build());
         response.setPeriod(Period.builder().start(admissions.getAdmitTime().toString()).build());
-        response.setExtension(Arrays.asList(Extension.builder()
+        response.setExtension(List.of(Extension.builder()
                         .url("admission location")
-                        .valueString(admissions.getAdmissionLocation()).build(),
-                Extension.builder().url("discharged location").valueString(admissions.getDischargeLocation()).build(),
-                Extension.builder().url("insurance").valueString(admissions.getEthnicity()).build()));
+                        .extension(List.of(EncounterMeta.builder()
+                                .url("admission location")
+                                .valueString(admissions.getAdmissionLocation()).build())).build(),
+                Extension.builder()
+                        .url("discharged location")
+                        .extension(List.of(EncounterMeta.builder()
+                                .url("discharged location")
+                                .valueString(admissions.getDischargeLocation()).build())).build(),
+                Extension.builder()
+                        .url("insurance")
+                        .extension(List.of(EncounterMeta.builder()
+                                .url("insurance")
+                                .valueString(admissions.getInsurance()).build())).build()));
         return response;
     }
 

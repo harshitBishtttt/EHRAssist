@@ -5,13 +5,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Extension {
+public class EncounterMeta {
     private String url;
-    private List<EncounterMeta> extension;
+    private String valueString;
 }

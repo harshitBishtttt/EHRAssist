@@ -14,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 public class Resource {
     private String resourceType;
-    private Integer id;
+    private String id;
     private EntryMeta meta;
     private ClinicalStatus clinicalStatus;
     private VerificationStatus verificationStatus;

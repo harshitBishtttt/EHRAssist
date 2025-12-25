@@ -54,7 +54,7 @@ public class PatientConditionServiceImpl implements PatientConditionService {
                         .resourceType("Condition")
                         .clinicalStatus(ClinicalStatus.builder().build())
                         .verificationStatus(VerificationStatus.builder().build())
-                        .id(ittr.getRowId())
+                        .id(ittr.getRowId().toString())
                         .meta(EntryMeta.builder().versionId("1").source("#II7YGAcYPBuLlrB3")
                                 .lastUpdated(String.valueOf(LocalDateTime.now())).build())
                         .clinicalStatus(ClinicalStatus.builder().coding(List.of(Coding.builder()
@@ -86,7 +86,7 @@ public class PatientConditionServiceImpl implements PatientConditionService {
                                         .display(!ObjectUtils.isEmpty(ittr.getConditionMaster()) ? ittr.getConditionMaster().getLongTitle() : "")
                                         .system("http://hl7.org/fhir/sid/icd-10-cm")
                                         .build())).build()).build());
-                entryObj.setSearch(Search.builder().mode("matched").build());
+                entryObj.setSearch(Search.builder().mode("match").build());
                 return entryObj;
             }).toList();
         }

@@ -1,8 +1,10 @@
 package EHRAssist.service.impls;
 
 import EHRAssist.dto.response.PatientEncounterResponse;
+import EHRAssist.dto.response.patientConditionResponse.Link;
 import EHRAssist.dto.response.patientEncounterResponse.*;
 import EHRAssist.dto.response.patientEncounterResponse.Search;
+import EHRAssist.dto.response.patientEncounterResponse.Meta;
 import EHRAssist.model.VisitAdmissions;
 import EHRAssist.repository.PatientEncounterRepository;
 import EHRAssist.service.PatientEncounterService;
@@ -25,6 +27,9 @@ public class PatientEncounterServiceImpl implements PatientEncounterService {
         response.setResourceType("Encounter");
         response.setId(admissions.getRowId().toString());
         response.setMeta(EntryMeta.builder().build());
+        response.setMeta(EntryMeta.builder()
+                .lastUpdate("2025-12-16T07:04:34.392+00:00")
+                .versionId("2").source("#nm0cjUfMVw6FekuB").build());
         response.setType(ResourceType.builder().text(List.of(admissions.getAdmissionType())).build());
         response.setSubject(Subject.builder().identifier("Patient/" + admissions.getSubjectId()).build());
         response.setPeriod(Period.builder().start(admissions.getAdmitTime().toString()).build());
@@ -46,7 +51,7 @@ public class PatientEncounterServiceImpl implements PatientEncounterService {
             List<VisitAdmissions> visitAdmissions = bySubjectId.get();
             List<Entry> entries = visitAdmissions.stream().map(ittr -> {
                 Entry entry = new Entry();
-                entry.setFullUrl("");
+                entry.setFullUrl("10.131.58.59:481/baseR4/Encounter/" + subjectId);
                 entry.setResource(resourceMapper(ittr));
                 entry.setSearch(Search.builder().mode("matched").build());
                 return entry;
@@ -54,7 +59,9 @@ public class PatientEncounterServiceImpl implements PatientEncounterService {
             response.setTotal(entries.size());
             response.setEntry(entries);
         }
-        response.setLink(null);
+        response.setMeta(Meta.builder().lastUpdated("2025-12-25T08:45:29.650+00:00").build());
+        response.setLink(List.of(Link.builder().relation("self")
+                .url("10.131.58.59:481/baseR4/Encounter?_count=" + count + "&subject=" + subjectId).build()));
         response.setResourceType("Bundle");
         response.setType("searchset");
         return response;

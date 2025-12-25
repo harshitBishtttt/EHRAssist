@@ -1,7 +1,7 @@
 package EHRAssist.dto.response;
 
 import EHRAssist.dto.response.patientConditionResponse.Link;
-import EHRAssist.dto.response.patientConditionResponse.Meta;
+import EHRAssist.dto.response.patientEncounterResponse.Meta;
 import EHRAssist.dto.response.patientEncounterResponse.Entry;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

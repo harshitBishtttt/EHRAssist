@@ -30,6 +30,9 @@ public class PatientEncounterServiceImpl implements PatientEncounterService {
         response.setMeta(EntryMeta.builder()
                 .lastUpdate("2025-12-16T07:04:34.392+00:00")
                 .versionId("2").source("#nm0cjUfMVw6FekuB").build());
+        response.setStatus("planned");
+        response.setClasss(Classs.builder().code("AMB").display("ambulatory")
+                .system("http://terminology.hl7.org/CodeSystem/v3-ActCode").build());
         response.setType(ResourceType.builder().text(List.of(admissions.getAdmissionType())).build());
         response.setSubject(Subject.builder().identifier("Patient/" + admissions.getSubjectId()).build());
         response.setPeriod(Period.builder().start(admissions.getAdmitTime().toString()).build());
@@ -38,7 +41,6 @@ public class PatientEncounterServiceImpl implements PatientEncounterService {
                         .valueString(admissions.getAdmissionLocation()).build(),
                 Extension.builder().url("discharged location").valueString(admissions.getDischargeLocation()).build(),
                 Extension.builder().url("insurance").valueString(admissions.getEthnicity()).build()));
-        response.setClass_(Classs.builder().build());
         return response;
     }
 

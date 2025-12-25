@@ -17,7 +17,7 @@ public class Resource {
     private EntryMeta meta;
     private List<Extension> extension;
     private String status;
-    private Classs class_;
+    private Classs classs;
     private ResourceType type;
     private Subject subject;
     private Period period;

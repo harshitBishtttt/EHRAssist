@@ -27,6 +27,12 @@ public class PersonCondition {
 
     @Column(name = "seq_num")
     private Integer seqNum;
+    @Column(name = "severity_code")
+    private String severityCode;
+
+    @Column(name = "severity")
+    private String severity;
+
 
     @OneToOne
     @JoinColumn(name = "icd9_code")

@@ -26,7 +26,7 @@ public class PatientPrescriptionServiceImpl implements PatientPrescriptionServic
     private Resource getResourceType(PersonPrescription obj) {
         Resource resource = new Resource();
         PersonName personName = obj.getPersonName();
-        resource.setId(obj.getRowId());
+        resource.setId(obj.getRowId().toString());
         resource.setResourceType("MedicationRequest");
         resource.setMedicationCodeableConcept(MedicationCodeableConcept.builder()
                 .text(obj.getDrug()).coding(List.of(Coding.builder()

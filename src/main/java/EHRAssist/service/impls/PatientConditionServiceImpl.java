@@ -50,6 +50,7 @@ public class PatientConditionServiceImpl implements PatientConditionService {
                 Entry entryObj = new Entry();
                 ConditionMaster conditionMaster = ittr.getConditionMaster();
                 entryObj.setFullUrl(CONDITION_URL_1);
+
                 entryObj.setResource(Resource.builder()
                         .resourceType("Condition")
                         .clinicalStatus(ClinicalStatus.builder().build())
@@ -72,8 +73,8 @@ public class PatientConditionServiceImpl implements PatientConditionService {
                         .category(List.of(Category.builder()
                                 .coding(List.of(Coding.builder()
                                         .system(CONDITION_SYSTEM)
-                                        .display(!ObjectUtils.isEmpty(conditionMaster) ? conditionMaster.getShortTitle() : "")
-                                        .code(!ObjectUtils.isEmpty(conditionMaster) ? conditionMaster.getIcd9Code() : "").build())).build()))
+                                        .display(!ObjectUtils.isEmpty(conditionMaster) ? conditionMaster.getCategory() : "")
+                                        .code(!ObjectUtils.isEmpty(conditionMaster) ? conditionMaster.getCatCode() : "").build())).build()))
                         .encounter(Encounter.builder()
                                 .reference("Encounter/" + ittr.getHadmId()).build())
                         .subject(Subject.builder()

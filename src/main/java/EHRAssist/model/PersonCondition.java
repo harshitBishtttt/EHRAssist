@@ -27,6 +27,7 @@ public class PersonCondition {
 
     @Column(name = "seq_num")
     private Integer seqNum;
+
     @OneToOne
     @JoinColumn(name = "icd9_code")
     private ConditionMaster conditionMaster;

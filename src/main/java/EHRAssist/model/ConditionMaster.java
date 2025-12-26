@@ -20,4 +20,8 @@ public class ConditionMaster {
     private String shortTitle;
     @Column(name = "long_title")
     private String longTitle;
+    @Column(name="category")
+    private String category;
+    @Column(name="cat_code")
+    private String catCode;
 }

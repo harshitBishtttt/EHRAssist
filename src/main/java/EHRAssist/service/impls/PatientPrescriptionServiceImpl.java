@@ -69,7 +69,11 @@ public class PatientPrescriptionServiceImpl implements PatientPrescriptionServic
                         .code("d")
                         .unit("days")
                         .system("http://unitsofmeasure.org").build())
-                .quantity(null).build());
+                .quantity(ExpectedSupplyDuration.builder()
+                        .value(5)
+                        .code("{tbl}")
+                        .unit("tablet")
+                        .system("http://unitsofmeasure.org").build()).build());
         return resource;
     }
 

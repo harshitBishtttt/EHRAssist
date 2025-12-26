@@ -12,7 +12,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Language {
-    private String language;
     private List<Coding> coding;
     private String text;
 }

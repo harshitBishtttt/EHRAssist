@@ -14,10 +14,10 @@ import java.util.List;
 @AllArgsConstructor
 public class Resource {
     private String resourceType;
-    private Integer id;
+    private String id;
     private EntryMeta meta;
     private Text text;
-    private Boolean active;
+    //private Boolean active;
     private List<NameResponse> name;
     private List<TelecomResponse> telecom;
     private String gender;

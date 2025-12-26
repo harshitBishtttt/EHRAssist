@@ -24,8 +24,8 @@ public class PatientSearchServiceImpl implements PatientSearchService {
     public Resource resourceMapper(Person person) {
         Resource resource = new Resource();
         resource.setResourceType("Patient");
-        resource.setId(person.getSubjectId());
-        resource.setActive(person.getDod().isAfter(LocalDateTime.now()));
+        resource.setId(String.valueOf(person.getSubjectId()));
+        //resource.setActive(person.getDod().isAfter(LocalDateTime.now()));
         resource.setMeta(EntryMeta.builder()
                 .lastUpdated(String.valueOf(person.getLoadedAt()))
                 .source("#SPMeDNKMZT33s52w")
@@ -52,7 +52,7 @@ public class PatientSearchServiceImpl implements PatientSearchService {
                         .build();
             }).toList());
         }
-        resource.setGender(person.getGender());
+        resource.setGender(!ObjectUtils.isEmpty(person.getGender()) ? person.getGender().toLowerCase() : "");
         resource.setBirthDate(person.getBirthdate());
         if (!ObjectUtils.isEmpty(person.getPersonAddress())) {
             resource.setAddress(person.getPersonAddress().stream().map(ittr -> {
@@ -64,16 +64,16 @@ public class PatientSearchServiceImpl implements PatientSearchService {
             }).toList());
         }
         VisitAdmissions visitAdmissions = person.getVisitAdmissions();
+        String marStatus = !ObjectUtils.isEmpty(visitAdmissions) ||
+                !ObjectUtils.isEmpty(visitAdmissions.getMaritalStatus())
+                ? visitAdmissions.getMaritalStatus().substring(0, 1).toUpperCase() +
+                visitAdmissions.getMaritalStatus().substring(1).toLowerCase() : "";
         if (!ObjectUtils.isEmpty(visitAdmissions)) {
             resource.setMaritalStatus(MaritalStatus.builder()
-                    .text(visitAdmissions.getMaritalStatus())
+                    .text(marStatus)
                     .coding(Collections.singletonList(Coding.builder()
-                            .code(String.valueOf(!ObjectUtils.isEmpty(visitAdmissions) ||
-                                    !ObjectUtils.isEmpty(visitAdmissions.getMaritalStatus()) ?
-                                    visitAdmissions.getMaritalStatus() : ""))
-                            .display(!ObjectUtils.isEmpty(visitAdmissions) ||
-                                    !ObjectUtils.isEmpty(visitAdmissions.getMaritalStatus())
-                                    ? visitAdmissions.getMaritalStatus() : "")
+                            .code("" + marStatus.charAt(0))
+                            .display(marStatus)
                             .system("http://terminology.hl7.org/CodeSystem/v3-MaritalStatus")
                             .build())).build());
             Communication communication = new Communication();

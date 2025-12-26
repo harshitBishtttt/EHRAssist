@@ -26,7 +26,7 @@ public class PatientEncounterServiceImpl implements PatientEncounterService {
         response.setMeta(EntryMeta.builder().build());
         response.setMeta(EntryMeta.builder()
                 .lastUpdate("2025-12-16T07:04:34.392+00:00")
-                .versionId("2").source("#nm0cjUfMVw6FekuB").build());
+                .versionId("1").source("#nm0cjUfMVw6FekuB").build());
         response.setStatus("planned");
         response.setClasss(Classs.builder().code("AMB").display("ambulatory")
                 .system("http://terminology.hl7.org/CodeSystem/v3-ActCode").build());

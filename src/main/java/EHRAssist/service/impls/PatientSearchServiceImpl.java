@@ -46,12 +46,20 @@ public class PatientSearchServiceImpl implements PatientSearchService {
             }).toList());
         }
         if (!ObjectUtils.isEmpty(person.getPersonTelecom())) {
-            resource.setTelecom(person.getPersonTelecom().stream().map(ittr -> {
-                return TelecomResponse.builder()
-                        .system(ittr.getSystem())
-                        .value(ittr.getValue())
-                        .build();
-            }).toList());
+            List<Object> obj = new ArrayList<>();
+            person.getPersonTelecom().forEach(ittr -> {
+                if (ittr.getSystem().equalsIgnoreCase("phone")) {
+                    obj.add(PhoneTelecom.builder()
+                            .value(ittr.getValue())
+                            .system(ittr.getSystem()).use("mobile").build());
+                } else {
+                    obj.add(TelecomResponse.builder()
+                            .system(ittr.getSystem())
+                            .value(ittr.getValue())
+                            .build());
+                }
+            });
+            resource.setTelecom(obj);
         }
         resource.setGender(!ObjectUtils.isEmpty(person.getGender()) ? person.getGender().toLowerCase() : "");
         resource.setBirthDate(person.getBirthdate());

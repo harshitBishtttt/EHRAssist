@@ -19,7 +19,7 @@ public class Resource {
     private Text text;
     //private Boolean active;
     private List<NameResponse> name;
-    private List<TelecomResponse> telecom;
+    private List<Object> telecom;
     private String gender;
     private LocalDate birthDate;
     private List<Address> address;

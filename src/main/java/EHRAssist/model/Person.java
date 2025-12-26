@@ -53,6 +53,11 @@ public class Person {
     @Column(name = "birth_date")
     private LocalDate birthdate;
 
+    @Column(name = "language")
+    private String language;
+
+    @Column(name = "lang_code")
+    private String langCode;
 
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)

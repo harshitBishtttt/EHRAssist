@@ -3,6 +3,7 @@ package EHRAssist.service.impls;
 import EHRAssist.dto.response.PatientSearchResponse;
 import EHRAssist.dto.response.patientSearchResponse.*;
 import EHRAssist.model.Person;
+import EHRAssist.model.PersonLanguage;
 import EHRAssist.model.VisitAdmissions;
 import EHRAssist.repository.PersonRepository;
 import EHRAssist.service.PatientSearchService;
@@ -77,11 +78,11 @@ public class PatientSearchServiceImpl implements PatientSearchService {
                             .system("http://terminology.hl7.org/CodeSystem/v3-MaritalStatus")
                             .build())).build());
             Communication communication = new Communication();
-            Language language = Language.builder().text(visitAdmissions.getLanguage())
+            Language language = Language.builder().text(person.getLanguage())
                     .coding(Collections.singletonList(Coding.builder()
                             .system("urn:ietf:bcp:47")
-                            .code(visitAdmissions.getLanguage())
-                            .display(visitAdmissions.getLanguage())
+                            .code(person.getLangCode())
+                            .display(person.getLanguage())
                             .build())).build();
             communication.setLanguage(language);
             communication.setPreferred(true);

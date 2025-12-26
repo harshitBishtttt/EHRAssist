@@ -22,5 +22,5 @@ public class PatientSearchResponse {
     private String type;
     private Integer total;
     private List<Link> link;
-    List<Entry> entry;
+    private List<Entry> entry;
 }

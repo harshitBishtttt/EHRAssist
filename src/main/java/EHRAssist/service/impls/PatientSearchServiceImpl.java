@@ -105,7 +105,9 @@ public class PatientSearchServiceImpl implements PatientSearchService {
         searchResponse.setResourceType("Bundle");
         searchResponse.setMeta(Meta.builder().lastUpdated(String.valueOf(LocalDateTime.now())).build());
         searchResponse.setType("searchset");
-        searchResponse.setLink(Collections.singletonList(Link.builder().url("").relation("self").build()));
+        searchResponse.setLink(Collections.singletonList(Link.builder()
+                .url("10.131.58.59:481/baseR4/Patient?family=" + family + "&given=" + given + "&email=" + email + "&birthdate=" + birthdate + "&gender=" + gender)
+                .relation("self").build()));
         if (getPersons.isPresent()) {
             List<Person> people = getPersons.get();
             List<Entry> matched = people.stream().map(ittr -> {

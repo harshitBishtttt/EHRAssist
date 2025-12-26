@@ -24,6 +24,6 @@ public class Resource {
     private String authoredOn;
     private List<ReasonCode> reasonCode;
     private List<Note> note;
-    private DosageInstruction dosageInstruction;
+    private List<DosageInstruction> dosageInstruction;
     private DispenseRequest dispenseRequest;
 }

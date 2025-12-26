@@ -27,15 +27,17 @@ public class PatientPrescriptionServiceImpl implements PatientPrescriptionServic
         resource.setId(obj.getRowId());
         resource.setResourceType("MedicationRequest");
         resource.setMedicationCodeableConcept(MedicationCodeableConcept.builder()
-                .text(obj.getDrugNameGeneric()).coding(List.of(Coding.builder()
+                .text(obj.getDrug()).coding(List.of(Coding.builder()
                         .code(obj.getFormularyDrugCd())
                         .system("http://www.nlm.nih.gov/research/umls/rxnorm")
                         .display(obj.getDrug()).build())).build());
         resource.setStatus(obj.getEndDate().isBefore(LocalDateTime.now())
                 ? "completed"
                 : "pending");
-        resource.setAuthoredOn(obj.getStartDate().toString());
-        resource.setDosageInstruction(DosageInstruction.builder()
+        resource.setAuthoredOn(LocalDateTime
+                .parse(obj.getStartDate().toString())
+                .toLocalDate().toString());
+        resource.setDosageInstruction(List.of(DosageInstruction.builder()
                 .route(Route.builder()
                         .coding(List.of(Coding.builder()
                                 .code(obj.getRoute())
@@ -44,17 +46,17 @@ public class PatientPrescriptionServiceImpl implements PatientPrescriptionServic
                 .text(obj.getProdStrength())
                 .timing(Timing.builder()
                         .repeat(Repeat.builder()
-                                .frequency("2")
-                                .period("1")
+                                .frequency(2)
+                                .period(1)
                                 .periodUnit("d").build()).build())
                 .doseAndRate(List.of(DoseAndRate.builder()
                         .doseQuantity(DoseQuantity.builder()
-                                .value(obj.getDoseValRx())
+                                .value(0.58)
                                 .unit(obj.getDoseUnitRx())
                                 .code("{" + obj.getFormularyDrugCd() + "}")
                                 .system("http://www.nlm.nih.gov/research/umls/rxnorm").build())
                         .build()))
-                .build());
+                .build()));
         resource.setMeta(EntryMeta.builder().versionId("1")
                 .source("#ULtyC0aiSJxdl9E2")
                 .lastUpdated("2025-12-22T09:53:10.308+00:00").build());
@@ -98,7 +100,8 @@ public class PatientPrescriptionServiceImpl implements PatientPrescriptionServic
             response.setType("searchset");
             response.setEntry(entryList);
             response.setMeta(Meta.builder().lastUpdated("2025-12-26T05:53:23.339+00:00").build());
-            response.setLink(Link.builder().relation("self").url("https://hapi.fhir.org/baseR4/MedicationRequest?subject=" + subjectId).build());
+            response.setLink(Link.builder().relation("self")
+                    .url("https://hapi.fhir.org/baseR4/MedicationRequest?subject=" + subjectId).build());
         }
         return response;
     }

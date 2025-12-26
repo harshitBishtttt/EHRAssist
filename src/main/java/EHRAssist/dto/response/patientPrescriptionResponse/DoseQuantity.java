@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DoseQuantity {
-    private String value;
+    private Double value;
     private String unit;
     private String system;
     private String code;

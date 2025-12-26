@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Repeat {
-    private String frequency;
-    private String period;
+    private Integer frequency;
+    private Integer period;
     private String periodUnit;
 }

@@ -10,6 +10,7 @@ import EHRAssist.service.PatientProceduresService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -22,13 +23,16 @@ public class PatientProceduresServiceImpls implements PatientProceduresService {
     private PersonProcedureRepository personProcedureRepository;
 
     private Resource resourceMapper(Object[] obj) {
+        String procedureCategory = (String) obj[9];
         return Resource.builder()
-                .id((Integer) obj[0])
+                .id(((Integer) obj[0]).toString())
                 .resourceType("Procedure")
                 .status("completed")
                 .meta(EntryMeta.builder().source("#ep95K1tk1zpP15i7").versionId("1").lastUpdated("2025-12-16T07:13:12.674+00:00").build())
-                .category(Category.builder().coding(List.of(Coding.builder().code((String) obj[9])
-                        .display((String) obj[9])
+                .category(Category.builder().coding(List.of(Coding.builder()
+                        .code(!ObjectUtils.isEmpty(procedureCategory) ? procedureCategory.toLowerCase()
+                                .replace(" ", "-") : "")
+                        .display(procedureCategory)
                         .system("http://terminology.hl7.org/CodeSystem/procedure-category").build())).build())
                 .code(Code.builder().coding(List.of(Coding.builder().system("http://www.cms.gov/codes/cpt")
                         .code("" + obj[5]).display((String) obj[9]).build())).text((String) obj[10]).build())

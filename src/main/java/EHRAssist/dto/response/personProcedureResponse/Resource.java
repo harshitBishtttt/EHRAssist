@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Resource {
     private String resourceType;
-    private Integer id;
+    private String id;
     private EntryMeta meta;
     private String status;
     private Category category;

@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -20,8 +22,8 @@ public class Resource {
     private MedicationCodeableConcept medicationCodeableConcept;
     private Subject subject;
     private String authoredOn;
-    private ReasonCode reasonCode;
-    private Note note;
+    private List<ReasonCode> reasonCode;
+    private List<Note> note;
     private DosageInstruction dosageInstruction;
     private DispenseRequest dispenseRequest;
 }

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.JoinFormula;
 
 import java.time.LocalDateTime;
 
@@ -72,4 +73,15 @@ public class PersonPrescription {
 
     @Column(name = "route", nullable = false, length = 50)
     private String route;
+
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinFormula("""
+               (SELECT pn.id
+                FROM Person_Name pn
+                WHERE pn.subject_id_from_person_table = subject_id
+                  AND pn.name_type = 'official')
+            """)
+    private PersonName personName;
+
 }

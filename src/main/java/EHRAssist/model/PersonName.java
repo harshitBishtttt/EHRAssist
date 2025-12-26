@@ -18,9 +18,14 @@ public class PersonName {
     @Column(name = "first_name")
     private String firstName;
 
+    @Column(name = "subject_id_from_person_table")
+    private Integer subjectId;
+
     @Column(name = "middle_name")
     private String middleName;   // surname
 
     @Column(name = "last_name")
     private String lastName;
+    @Column(name = "name_type")
+    private String nameType;
 }

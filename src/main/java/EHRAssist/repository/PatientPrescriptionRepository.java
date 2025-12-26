@@ -11,14 +11,18 @@ import java.util.List;
 @Repository
 public interface PatientPrescriptionRepository extends JpaRepository<PersonPrescription, Integer> {
     @Query("""
-                SELECT pm
-                FROM PersonPrescription pm
-                WHERE (:subjectId IS NULL OR pm.subjectId = :subjectId)
-                  AND (:rowId IS NULL OR pm.rowId = :rowId)
-            """)
+    SELECT DISTINCT pm
+    FROM PersonPrescription pm
+    LEFT JOIN PersonName pn
+      ON pn.subjectId = pm.subjectId
+     AND pn.nameType = 'official'
+    WHERE (:subjectId IS NULL OR pm.subjectId = :subjectId)
+      AND (:rowId IS NULL OR pm.rowId = :rowId)
+""")
     List<PersonPrescription> findBySubjectIdOrRowId(
             @Param("subjectId") Integer subjectId,
             @Param("rowId") Integer rowId
     );
+
 
 }

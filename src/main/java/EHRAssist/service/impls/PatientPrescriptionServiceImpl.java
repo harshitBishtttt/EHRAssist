@@ -6,6 +6,7 @@ import EHRAssist.dto.response.patientPrescriptionResponse.*;
 import EHRAssist.dto.response.patientSearchResponse.EntryMeta;
 import EHRAssist.dto.response.patientSearchResponse.Link;
 import EHRAssist.dto.response.personProcedureResponse.Search;
+import EHRAssist.model.PersonName;
 import EHRAssist.model.PersonPrescription;
 import EHRAssist.repository.PatientPrescriptionRepository;
 import EHRAssist.service.PatientPrescriptionService;
@@ -24,6 +25,7 @@ public class PatientPrescriptionServiceImpl implements PatientPrescriptionServic
 
     private Resource getResourceType(PersonPrescription obj) {
         Resource resource = new Resource();
+        PersonName personName = obj.getPersonName();
         resource.setId(obj.getRowId());
         resource.setResourceType("MedicationRequest");
         resource.setMedicationCodeableConcept(MedicationCodeableConcept.builder()
@@ -62,7 +64,9 @@ public class PatientPrescriptionServiceImpl implements PatientPrescriptionServic
                 .lastUpdated("2025-12-22T09:53:10.308+00:00").build());
         resource.setIntent("order");
         resource.setPriority("routine");
-        resource.setSubject(Subject.builder().display("").reference("Patient/" + obj.getSubjectId()).build());
+        resource.setSubject(Subject.builder().display(!ObjectUtils.isEmpty(personName)
+                        ? personName.getFirstName() + " " + personName.getLastName() : "")
+                .reference("Patient/" + obj.getSubjectId()).build());
         resource.setReasonCode(List.of(ReasonCode.builder().text("Fever and body pain").build()));
         resource.setNote(List.of(Note.builder().text("Do not exceed recommended dose").build()));
         resource.setDispenseRequest(DispenseRequest.builder()

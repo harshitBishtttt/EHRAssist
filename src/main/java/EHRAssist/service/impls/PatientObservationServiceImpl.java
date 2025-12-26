@@ -80,7 +80,6 @@ public class PatientObservationServiceImpl implements PatientObservationService 
                 .display("anual sphygmomanometer")
                 .code("6525385")
                 .system("http://snomed.info/sct").build())).build());
-
         resource.setStatus("final");
         return resource;
     }

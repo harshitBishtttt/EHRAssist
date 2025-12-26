@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ExpectedSupplyDuration {
-    private String value;
+    private Integer value;
     private String unit;
     private String system;
     private String code;

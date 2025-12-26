@@ -63,7 +63,13 @@ public class PatientPrescriptionServiceImpl implements PatientPrescriptionServic
         resource.setSubject(Subject.builder().display("").reference("Patient/" + obj.getSubjectId()).build());
         resource.setReasonCode(List.of(ReasonCode.builder().text("Fever and body pain").build()));
         resource.setNote(List.of(Note.builder().text("Do not exceed recommended dose").build()));
-
+        resource.setDispenseRequest(DispenseRequest.builder()
+                .expectedSupplyDuration(ExpectedSupplyDuration.builder()
+                        .value(10)
+                        .code("d")
+                        .unit("days")
+                        .system("http://unitsofmeasure.org").build())
+                .quantity(null).build());
         return resource;
     }
 

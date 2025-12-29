@@ -50,7 +50,7 @@ public interface PersonMeasurementRepository extends JpaRepository<PersonMeasure
             :loincCode IS NULL
             OR :loincCode = ''
             OR mm.loinc_code = :loincCode
-          )
+          ) And lm.valuenum != 0
 """, nativeQuery = true)
     List<Object[]> findLatestMeasurements(
             @Param("subjectId") Integer subjectId,

@@ -26,28 +26,40 @@ public class PatientEncounterServiceImpl implements PatientEncounterService {
         response.setMeta(EntryMeta.builder().build());
         response.setMeta(EntryMeta.builder()
                 .lastUpdate("2025-12-16T07:04:34.392+00:00")
-                .versionId("1").source("#nm0cjUfMVw6FekuB").build());
+                .versionId("2").source("#nm0cjUfMVw6FekuB").build());
         response.setStatus("planned");
         response.setClasss(Classs.builder().code("AMB").display("ambulatory")
                 .system("http://terminology.hl7.org/CodeSystem/v3-ActCode").build());
         response.setType(ResourceType.builder().text(List.of(admissions.getAdmissionType())).build());
-        response.setSubject(Subject.builder().identifier("Patient/" + admissions.getSubjectId()).build());
+        response.setSubject(Subject.builder().reference("Patient/" + admissions.getSubjectId()).build());
         response.setPeriod(Period.builder().start(admissions.getAdmitTime().toString()).build());
-        response.setExtension(List.of(Extension.builder()
+        response.setExtension(List.of(ExtensionTypeOne.builder()
                         .url("admission location")
                         .extension(List.of(EncounterMeta.builder()
                                 .url("admission location")
                                 .valueString(admissions.getAdmissionLocation()).build())).build(),
-                Extension.builder()
+                ExtensionTypeOne.builder()
                         .url("discharged location")
                         .extension(List.of(EncounterMeta.builder()
                                 .url("discharged location")
                                 .valueString(admissions.getDischargeLocation()).build())).build(),
-                Extension.builder()
+                ExtensionTypeOne.builder()
                         .url("insurance")
                         .extension(List.of(EncounterMeta.builder()
                                 .url("insurance")
-                                .valueString(admissions.getInsurance()).build())).build()));
+                                .valueString(admissions.getInsurance()).build())).build(),
+                ExtensionTypeTwo.builder()
+                        .url("attachedDocument")
+                        .valueAttachment(ValueAttachment.builder()
+                                .contentType("application/pdf")
+                                .title("Example PDF")
+                                .url("https://example.com/example.pdf").build()).build(),
+                ExtensionTypeTwo.builder()
+                        .url("attachedDocument")
+                        .valueAttachment(ValueAttachment.builder()
+                                .contentType("application/pdf")
+                                .title("Test PDF")
+                                .url("https://example.com/test.pdf").build()).build()));
         return response;
     }
 

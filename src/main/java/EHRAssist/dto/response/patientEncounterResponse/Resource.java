@@ -15,7 +15,7 @@ public class Resource {
     private String resourceType;
     private String id;
     private EntryMeta meta;
-    private List<Extension> extension;
+    private List<Object> extension;
     private String status;
     private Classs classs;
     private ResourceType type;

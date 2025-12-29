@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Subject {
-    private String reference;
+public class ExtensionTypeTwo {
+    private String url;
+    private ValueAttachment valueAttachment;
 }

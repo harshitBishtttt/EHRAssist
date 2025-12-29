@@ -24,6 +24,7 @@ public class PatientSearchServiceImpl implements PatientSearchService {
 
     public Resource resourceMapper(Person person) {
         Resource resource = new Resource();
+        VisitAdmissions visitAdmissions = person.getVisitAdmissions();
         resource.setResourceType("Patient");
         resource.setId(String.valueOf(person.getSubjectId()));
         //resource.setActive(person.getDod().isAfter(LocalDateTime.now()));
@@ -37,6 +38,21 @@ public class PatientSearchServiceImpl implements PatientSearchService {
                 return Extension.builder().valueString(ittr.getValueString()).url(ittr.getUrl()).build();
             }).toList());
         }
+        resource.setExtension(List.of(Extension.builder()
+                        .url("attachedDocument")
+                        .valueString(person.getSourceFile()).build(),
+                Extension.builder()
+                        .url("educationQualification")
+                        .valueString("Bachelor’s degree (e.g. BA, BS)").build(),
+                Extension.builder()
+                        .url("employmentStatus")
+                        .valueString(!ObjectUtils.isEmpty(visitAdmissions) ? visitAdmissions.getMaritalStatus() : "").build(),
+                Extension.builder()
+                        .url("ethnicity")
+                        .valueString(!ObjectUtils.isEmpty(visitAdmissions) ? visitAdmissions.getEthnicity() : "").build(),
+                Extension.builder()
+                        .url("race")
+                        .valueString(!ObjectUtils.isEmpty(visitAdmissions) ? visitAdmissions.getReligion() : "").build()));
         if (!ObjectUtils.isEmpty(person.getPersonName())) {
             resource.setName(person.getPersonName().stream().map(ittr -> {
                 return NameResponse.builder()
@@ -72,7 +88,7 @@ public class PatientSearchServiceImpl implements PatientSearchService {
                         .postalCode(ittr.getPostalCode()).build();
             }).toList());
         }
-        VisitAdmissions visitAdmissions = person.getVisitAdmissions();
+
         String marStatus = !ObjectUtils.isEmpty(visitAdmissions) ||
                 !ObjectUtils.isEmpty(visitAdmissions.getMaritalStatus())
                 ? visitAdmissions.getMaritalStatus().substring(0, 1).toUpperCase() +

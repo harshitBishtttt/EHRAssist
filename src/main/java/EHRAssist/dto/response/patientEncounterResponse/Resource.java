@@ -18,7 +18,7 @@ public class Resource {
     private List<Object> extension;
     private String status;
     private Classs classs;
-    private ResourceType type;
+    private List<ResourceType> type;
     private Subject subject;
     private Period period;
 }

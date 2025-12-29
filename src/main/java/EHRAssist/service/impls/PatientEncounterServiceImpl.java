@@ -30,7 +30,7 @@ public class PatientEncounterServiceImpl implements PatientEncounterService {
         response.setStatus("planned");
         response.setClasss(Classs.builder().code("AMB").display("ambulatory")
                 .system("http://terminology.hl7.org/CodeSystem/v3-ActCode").build());
-        response.setType(ResourceType.builder().text(List.of(admissions.getAdmissionType())).build());
+        response.setType(List.of(ResourceType.builder().text(admissions.getAdmissionType()).build()));
         response.setSubject(Subject.builder().reference("Patient/" + admissions.getSubjectId()).build());
         response.setPeriod(Period.builder().start(admissions.getAdmitTime().toString()).build());
         response.setExtension(List.of(ExtensionTypeOne.builder()

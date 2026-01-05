@@ -1,5 +1,6 @@
 package EHRAssist.dto.response.patientEncounterResponse;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,6 +18,7 @@ public class Resource {
     private EntryMeta meta;
     private List<Object> extension;
     private String status;
+    @JsonProperty("class")
     private Classs classs;
     private List<ResourceType> type;
     private Subject subject;

@@ -1,23 +1,18 @@
 package EHRAssist.service.impls;
 
-import EHRAssist.dto.response.PatientObservationResponse;
-import EHRAssist.dto.response.patientConditionResponse.Link;
-import EHRAssist.dto.response.patientObservationResponse.*;
-import EHRAssist.dto.response.personProcedureResponse.Search;
 import EHRAssist.repository.PersonMeasurementRepository;
 import EHRAssist.service.PatientObservationService;
+import org.hl7.fhir.r4.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ObjectUtils;
 
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
-import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 
 @Service
 public class PatientObservationServiceImpl implements PatientObservationService {
+
     @Autowired
     private PersonMeasurementRepository personMeasurementRepository;
 
@@ -29,86 +24,100 @@ public class PatientObservationServiceImpl implements PatientObservationService 
                 .replaceAll("\\s+", "-");
     }
 
-    private Resource resourceMapper(Object[] ittr) {
-        Resource resource = new Resource();
-        resource.setResourceType("Observation");
-        resource.setId(ittr[0].toString());
-        resource.setMeta(EntryMeta.builder().versionId("1").lastUpdated(OffsetDateTime.now(ZoneOffset.UTC)
-                        .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX")))
-                .profile(List.of("http://hl7.org/fhir/StructureDefinition/vitalsigns"))
-                .source("#wnzvyWyVXFVJbcHX").build());
-        resource.setText(Text.builder()
-                .div("<div xmlns=\"http://www.w3.org/1999/xhtml\">" + ittr[9] + " observation (no performer)</div>")
-                .status("generated").build());
-        resource.setIdentifier(Identifier.builder().system("http://hospital.example.org/observations")
-                .value("BP-2025-0002").build());
-        Component c = new Component();
-        String lable = !ObjectUtils.isEmpty(ittr[9]) ? (String) ittr[9] : "";
-        Code coding = Code.builder().coding(List.of(Coding.builder()
-                .code(!ObjectUtils.isEmpty(ittr[12]) ? (String) ittr[12] : "")
-                .system("http://loinc.org")
-                .display(lable).build())).text(lable).build();
-        c.setCode(coding);
-        c.setValueQuantity(ValueQuantity.builder()
-                .value(!ObjectUtils.isEmpty(ittr[6]) ? (double) ittr[6] : 0.0)
-                .unit((String) ittr[7]).code("" + (String) ittr[7]).system("http://unitsofmeasure.org").build());
-        resource.setComponent(List.of(c));
-        String s = (String) ittr[10];
-        resource.setCategory(List.of(Category.builder()
-                .coding(List.of(Coding.builder()
-                        .system("http://terminology.hl7.org/CodeSystem/observation-category")
-                        .code(toVitalSignsCode((String) ittr[10]))
-                        .display((String) ittr[10]).build())).text((String) ittr[10]).build()));
-        resource.setCode(Code.builder().coding(List.of(Coding.builder().system("http://loinc.org")
-                .code((String) ittr[12]).display((String) ittr[9]).build())).text((String) ittr[9]).build());
-        resource.setSubject(Subject.builder().reference("Patient/" + ittr[1])
-                .display((String) ittr[13] + " " + (String) ittr[15]).build());
-        resource.setEncounter(Encounter.builder().reference("Encounter/567865").build());
-        resource.setEffectiveDateTime(OffsetDateTime.now(ZoneOffset.UTC)
-                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX")));
-        resource.setIssued(OffsetDateTime.now(ZoneOffset.UTC)
-                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX")));
-        resource.setInterpretation(List.of(Interpretation.builder()
-                .coding(List.of(Coding.builder().display("Normal").code("N")
-                        .system("http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation").build())).build()));
-        resource.setNote(List.of(Note.builder().text("Patient seated and rested for 5 minutes before measurement.").build()));
-        resource.setBodySite(BodySite.builder().coding(List.of(Coding.builder()
-                .system("http://snomed.info/sct")
-                .code("368209003")
-                .display("Right arm").build())).build());
-        resource.setMethod(Method.builder().coding(List.of(Coding.builder()
-                .display("anual sphygmomanometer")
-                .code("6525385")
-                .system("http://snomed.info/sct").build())).build());
-        resource.setStatus("final");
-        return resource;
+    private Observation buildObservation(Object[] ittr) {
+
+        Observation obs = new Observation();
+        obs.setId(ittr[0].toString());
+        obs.getMeta()
+                .setVersionId("1")
+                .setLastUpdated(new Date())
+                .setSource("#wnzvyWyVXFVJbcHX")
+                .addProfile("http://hl7.org/fhir/StructureDefinition/vitalsigns");
+        obs.getText()
+                .setStatus(Narrative.NarrativeStatus.GENERATED)
+                .setDivAsString("<div xmlns=\"http://www.w3.org/1999/xhtml\">"
+                        + ittr[9] + " observation (no performer)</div>");
+        obs.addIdentifier()
+                .setSystem("http://hospital.example.org/observations")
+                .setValue("BP-2025-0002");
+        obs.setStatus(Observation.ObservationStatus.FINAL);
+        obs.addCategory()
+                .addCoding()
+                .setSystem("http://terminology.hl7.org/CodeSystem/observation-category")
+                .setCode(toVitalSignsCode((String) ittr[10]))
+                .setDisplay((String) ittr[10]);
+
+        obs.getCategoryFirstRep().setText((String) ittr[10]);
+        obs.getCode()
+                .addCoding()
+                .setSystem("http://loinc.org")
+                .setCode((String) ittr[12])
+                .setDisplay((String) ittr[9]);
+
+        obs.getCode().setText((String) ittr[9]);
+        obs.setSubject(new Reference("Patient/" + ittr[1])
+                .setDisplay(ittr[13] + " " + ittr[15]));
+        obs.setEncounter(new Reference("Encounter/567865"));
+        obs.setEffective(new DateTimeType(new Date()));
+        obs.setIssued(new Date());
+        obs.addInterpretation()
+                .addCoding()
+                .setSystem("http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation")
+                .setCode("N")
+                .setDisplay("Normal");
+        obs.addNote().setText("Patient seated and rested for 5 minutes before measurement.");
+        CodeableConcept bodySiteConcept = new CodeableConcept();
+        bodySiteConcept.addCoding(new Coding()
+                .setSystem("http://snomed.info/sct")
+                .setCode("368209003")
+                .setDisplay("Right arm"));
+        obs.setBodySite(bodySiteConcept);
+        CodeableConcept methodConcept = new CodeableConcept();
+        methodConcept.addCoding(new Coding()
+                .setSystem("http://snomed.info/sct")
+                .setCode("6525385")
+                .setDisplay("anual sphygmomanometer"));
+        obs.setMethod(methodConcept);
+        Observation.ObservationComponentComponent component = obs.addComponent();
+        component.getCode()
+                .addCoding()
+                .setSystem("http://loinc.org")
+                .setCode((String) ittr[12])
+                .setDisplay((String) ittr[9]);
+        component.getCode().setText((String) ittr[9]);
+        component.setValue(new Quantity()
+                .setValue(((Number) ittr[6]).doubleValue())
+                .setUnit((String) ittr[7])
+                .setSystem("http://unitsofmeasure.org")
+                .setCode((String) ittr[7]));
+        return obs;
     }
 
-    public PatientObservationResponse getPatientObservations(Integer subject,
-                                                             String code,
-                                                             Integer encounter,
-                                                             Pageable pageable) {
+    @Override
+    public Bundle getPatientObservations(Integer subject, String code, Integer encounter, Pageable pageable) {
 
-        PatientObservationResponse response = new PatientObservationResponse();
-        List<Object[]> latestMeasurements = personMeasurementRepository
-                .findLatestMeasurements(subject, code, encounter);
-        if (!latestMeasurements.isEmpty()) {
-            response.setEntry(latestMeasurements.stream().map(ittr -> {
-                return Entry.builder().resource(resourceMapper(ittr))
-                        .fullUrl("10.131.58.59:481/baseR4/Observation/" + subject).search(Search.builder()
-                                .mode("matched").build()).build();
-            }).toList());
-            response.setTotal(latestMeasurements.size());
-            response.setType("searchset");
-            response.setId(subject.toString());
-            response.setResourceType("Bundle");
-            response.setMeta(Meta.builder().lastUpdated(OffsetDateTime.now(ZoneOffset.UTC)
-                    .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX"))).build());
-            response.setLink(List.of(Link.builder()
-                    .url("10.131.58.59:481/baseR4/Observation?code=" + code + "&subject=" + subject)
-                    .relation("self").build()));
+        Bundle bundle = new Bundle();
+        bundle.setType(Bundle.BundleType.SEARCHSET);
+        bundle.setId(subject.toString());
+        bundle.getMeta().setLastUpdated(new Date());
 
+        List<Object[]> latestMeasurements =
+                personMeasurementRepository.findLatestMeasurements(subject, code, encounter);
+
+        for (Object[] ittr : latestMeasurements) {
+            Observation obs = buildObservation(ittr);
+
+            Bundle.BundleEntryComponent entry = bundle.addEntry();
+            entry.setFullUrl("http://10.131.58.59:481/baseR4/Observation/" + obs.getId());
+            entry.setResource(obs);
+            entry.getSearch().setMode(Bundle.SearchEntryMode.MATCH);
         }
-        return response;
+
+        bundle.setTotal(latestMeasurements.size());
+
+        bundle.addLink()
+                .setRelation("self")
+                .setUrl("http://10.131.58.59:481/baseR4/Observation?code=" + code + "&subject=" + subject);
+        return bundle;
     }
 }

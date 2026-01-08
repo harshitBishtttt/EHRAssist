@@ -2,6 +2,8 @@ package EHRAssist.controller;
 
 import EHRAssist.dto.response.*;
 import EHRAssist.service.*;
+import EHRAssist.utils.EHRAUtils;
+import org.hl7.fhir.r4.model.Bundle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -26,6 +28,8 @@ public class EHRAController {
     private PatientObservationService getPatientObservations;
     @Autowired
     private PatientPrescriptionService patientPrescriptionService;
+    @Autowired
+    private EHRAUtils ehraUtils;
 
 
     @GetMapping("/Patient")
@@ -74,13 +78,14 @@ public class EHRAController {
     }
 
     @GetMapping("/Observations")
-    ResponseEntity<PatientObservationResponse> getPatientObservations(
+    ResponseEntity<String> getPatientObservations(
             @RequestParam Integer subject,
             @RequestParam(required = false) Integer patient,
             @RequestParam(required = false) String code,
             @RequestParam(required = false) Integer encounter,
             Pageable pageable) {
-        return ResponseEntity.ok(getPatientObservations.getPatientObservations(subject, code, encounter, pageable));
+        Bundle response = getPatientObservations.getPatientObservations(subject, code, encounter, pageable);
+        return ehraUtils.fhirResponseWrapper(response);
     }
 
     @GetMapping("/MedicationRequest")

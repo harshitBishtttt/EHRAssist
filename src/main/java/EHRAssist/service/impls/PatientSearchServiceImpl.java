@@ -89,15 +89,15 @@ public class PatientSearchServiceImpl implements PatientSearchService {
             }).toList());
         }
 
-        String marStatus = !ObjectUtils.isEmpty(visitAdmissions) ||
+        String marStatus = !ObjectUtils.isEmpty(visitAdmissions) &&
                 !ObjectUtils.isEmpty(visitAdmissions.getMaritalStatus())
                 ? visitAdmissions.getMaritalStatus().substring(0, 1).toUpperCase() +
-                visitAdmissions.getMaritalStatus().substring(1).toLowerCase() : "";
+                visitAdmissions.getMaritalStatus().substring(1).toLowerCase() : null;
         if (!ObjectUtils.isEmpty(visitAdmissions)) {
             resource.setMaritalStatus(MaritalStatus.builder()
                     .text(marStatus)
                     .coding(Collections.singletonList(Coding.builder()
-                            .code("" + marStatus.charAt(0))
+                            .code(!ObjectUtils.isEmpty(marStatus) ? "" + marStatus.charAt(0) : "")
                             .display(marStatus)
                             .system("http://terminology.hl7.org/CodeSystem/v3-MaritalStatus")
                             .build())).build());

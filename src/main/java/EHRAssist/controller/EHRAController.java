@@ -47,15 +47,14 @@ public class EHRAController {
     }
 
     @GetMapping("/Condition")
-    ResponseEntity<PatientConditionResponse> getPatientCondition(
+    ResponseEntity<String> getPatientCondition(
             @RequestParam Integer subject,
             @RequestParam(required = false, defaultValue = "") String code,
             @RequestParam(required = false) Integer encounter,
             Pageable pageable
     ) {
-        return ResponseEntity.ok(
-                patientConditionService.getPatientCondition(subject, code, encounter, pageable)
-        );
+        Bundle response = patientConditionService.getPatientCondition(subject, code, encounter, pageable);
+        return ehraUtils.fhirResponseWrapper(response);
     }
 
 

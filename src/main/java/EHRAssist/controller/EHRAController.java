@@ -1,6 +1,6 @@
 package EHRAssist.controller;
 
-import EHRAssist.dto.response.*;
+import EHRAssist.dto.response.PatientEncounterResponse;
 import EHRAssist.service.*;
 import EHRAssist.utils.EHRAUtils;
 import org.hl7.fhir.r4.model.Bundle;
@@ -8,7 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
 
@@ -88,9 +91,10 @@ public class EHRAController {
     }
 
     @GetMapping("/MedicationRequest")
-    ResponseEntity<PatientPrescriptionResponse> getPatientPrescription(@RequestParam Integer subject,
-                                                                       @RequestParam(required = false) Integer prescriptionId) {
-        return ResponseEntity.ok(patientPrescriptionService.getPatientPrescription(subject, prescriptionId));
+    ResponseEntity<String> getPatientPrescription(@RequestParam Integer subject,
+                                                  @RequestParam(required = false) Integer prescriptionId) {
+        Bundle response = patientPrescriptionService.getPatientPrescription(subject, prescriptionId);
+        return ehraUtils.fhirResponseWrapper(response);
     }
 
 

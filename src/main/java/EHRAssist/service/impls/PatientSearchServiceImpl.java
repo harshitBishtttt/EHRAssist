@@ -179,24 +179,16 @@ public class PatientSearchServiceImpl implements PatientSearchService {
     private Patient mapToFhirPatient(Person person) {
 
         Patient patient = new Patient();
-
-        // Resource Id
         patient.setId(String.valueOf(person.getSubjectId()));
-
-        // Meta
         Meta meta = new Meta();
         meta.setVersionId("1");
         meta.setLastUpdatedElement(new InstantType(person.getLoadedAt().toString()));
         meta.setSource("#SPMeDNKMZT33s52w");
         patient.setMeta(meta);
-
-        // Text (Narrative)
         Narrative narrative = new Narrative();
         narrative.setStatus(Narrative.NarrativeStatus.GENERATED);
         narrative.setDivAsString(ApplicationConstants.DIV);
         patient.setText(narrative);
-
-        // Names
         if (!ObjectUtils.isEmpty(person.getPersonName())) {
             person.getPersonName().forEach(n -> {
                 HumanName name = new HumanName();
@@ -207,8 +199,6 @@ public class PatientSearchServiceImpl implements PatientSearchService {
                 patient.addName(name);
             });
         }
-
-        // Telecom
         if (!ObjectUtils.isEmpty(person.getPersonTelecom())) {
             person.getPersonTelecom().forEach(t -> {
                 ContactPoint telecom = new ContactPoint();
@@ -222,18 +212,12 @@ public class PatientSearchServiceImpl implements PatientSearchService {
                 patient.addTelecom(telecom);
             });
         }
-
-        // Gender
         if (!ObjectUtils.isEmpty(person.getGender())) {
             patient.setGender(Enumerations.AdministrativeGender.fromCode(person.getGender().toLowerCase()));
         }
-
-        // Birthdate
         if (!ObjectUtils.isEmpty(person.getBirthdate())) {
             patient.setBirthDate(java.sql.Date.valueOf(person.getBirthdate()));
         }
-
-        // Address
         if (!ObjectUtils.isEmpty(person.getPersonAddress())) {
             person.getPersonAddress().forEach(a -> {
                 Address address = new Address();
@@ -246,8 +230,6 @@ public class PatientSearchServiceImpl implements PatientSearchService {
                 patient.addAddress(address);
             });
         }
-
-        // Marital Status
         VisitAdmissions visit = person.getVisitAdmissions();
         if (!ObjectUtils.isEmpty(visit) && !ObjectUtils.isEmpty(visit.getMaritalStatus())) {
 
@@ -262,8 +244,6 @@ public class PatientSearchServiceImpl implements PatientSearchService {
 
             patient.setMaritalStatus(maritalStatus);
         }
-
-        // Communication (Language)
         if (!ObjectUtils.isEmpty(person.getLanguage())) {
 
             Coding langCoding = new Coding();
@@ -281,8 +261,6 @@ public class PatientSearchServiceImpl implements PatientSearchService {
 
             patient.addCommunication(communication);
         }
-
-        // Extensions
         patient.addExtension(new Extension("attachedDocument", new StringType(person.getSourceFile())));
         patient.addExtension(new Extension("educationQualification", new StringType("Bachelor’s degree (e.g. BA, BS)")));
 

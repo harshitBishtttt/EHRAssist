@@ -33,7 +33,7 @@ public class EHRAController {
 
 
     @GetMapping("/Patient")
-    ResponseEntity<PatientSearchResponse> searchPatient(
+    ResponseEntity<String> searchPatient(
             @RequestParam(required = false, defaultValue = "") String family,
             @RequestParam(required = false, defaultValue = "") String given,
             @RequestParam(required = false, defaultValue = "") String email,
@@ -42,9 +42,8 @@ public class EHRAController {
             @RequestParam(required = false, defaultValue = "") String gender,
             Pageable pageable
     ) {
-        return ResponseEntity.ok(
-                patientSearchService.searchPatient(family, given, email, phone, birthdate, gender, pageable)
-        );
+        Bundle response = patientSearchService.searchPatient(family, given, email, phone, birthdate, gender, pageable);
+        return ehraUtils.fhirResponseWrapper(response);
     }
 
     @GetMapping("/Condition")

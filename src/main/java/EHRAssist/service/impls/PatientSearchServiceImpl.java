@@ -41,7 +41,11 @@ public class PatientSearchServiceImpl implements PatientSearchService {
         if (!ObjectUtils.isEmpty(person.getPersonName())) {
             person.getPersonName().forEach(n -> {
                 HumanName name = new HumanName();
-                name.setUse(HumanName.NameUse.OFFICIAL);
+                if (HumanName.NameUse.OFFICIAL.toString().equalsIgnoreCase(n.getNameType())) {
+                    name.setUse(HumanName.NameUse.OFFICIAL);
+                } else if (HumanName.NameUse.USUAL.toString().equalsIgnoreCase(n.getNameType())) {
+                    name.setUse(HumanName.NameUse.USUAL);
+                }
                 name.setFamily(n.getLastName());
                 name.addGiven(n.getFirstName());
                 name.addGiven(n.getMiddleName());
@@ -139,12 +143,10 @@ public class PatientSearchServiceImpl implements PatientSearchService {
         bundle.setType(Bundle.BundleType.SEARCHSET);
         bundle.setTotal(persons.map(List::size).orElse(0));
 
-        // Meta
         Meta meta = new Meta();
         meta.setLastUpdatedElement(new InstantType(LocalDateTime.now().toString()));
         bundle.setMeta(meta);
 
-        // Self link
         bundle.addLink()
                 .setRelation("self")
                 .setUrl("10.131.58.59:481/baseR4/Patient?family=" + family +
@@ -153,7 +155,6 @@ public class PatientSearchServiceImpl implements PatientSearchService {
                         "&birthdate=" + birthdate +
                         "&gender=" + gender);
 
-        // Entries
         persons.ifPresent(list -> {
             list.forEach(p -> {
                 Patient patient = mapToFhirPatient(p);

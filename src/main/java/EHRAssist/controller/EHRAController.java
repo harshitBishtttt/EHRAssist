@@ -72,11 +72,12 @@ public class EHRAController {
     }
 
     @GetMapping("/Encounter")
-    ResponseEntity<PatientEncounterResponse> getPatientEncounter(
+    ResponseEntity<String> getPatientEncounter(
             @RequestParam Integer subject,
             @RequestParam(required = false) Integer count,
             Pageable pageable) {
-        return ResponseEntity.ok(patientEncounterService.getPatientEncounter(subject, count, pageable));
+        Bundle response = patientEncounterService.getPatientEncounter(subject, count, pageable);
+        return ehraUtils.fhirResponseWrapper(response);
     }
 
     @GetMapping("/Observations")

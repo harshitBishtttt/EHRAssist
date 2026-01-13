@@ -1,12 +1,11 @@
 package EHRAssist.service;
 
-import EHRAssist.dto.response.PatientEncounterResponse;
+import org.hl7.fhir.r4.model.Bundle;
 import org.springframework.data.domain.Pageable;
 
 public interface PatientEncounterService {
-    PatientEncounterResponse getPatientEncounter(Integer subject, Integer count,
-                                                 Pageable pageable);
-
+    Bundle getPatientEncounter(Integer subject, Integer count,
+                               Pageable pageable);
 
 
 }

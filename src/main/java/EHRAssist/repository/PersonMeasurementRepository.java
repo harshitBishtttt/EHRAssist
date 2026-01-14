@@ -20,7 +20,7 @@ public interface PersonMeasurementRepository extends JpaRepository<PersonMeasure
             ) AS rn
         FROM UCIH.dbo.Person_Measurement pm
         WHERE pm.subject_id = :subjectId
-          AND (:encounter IS NULL OR pm.hadm_id = :encounter)
+          AND (:encounter IS NULL OR pm.row_id = :encounter)
     )
     SELECT
         lm.row_id,

@@ -17,7 +17,6 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class VisitAdmissions  {
     @Id
-    @Column(name = "row_id", nullable = false)
     private Integer rowId;
 
     @Column(name = "subject_id", nullable = false)

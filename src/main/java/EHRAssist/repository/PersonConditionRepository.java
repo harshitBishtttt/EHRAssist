@@ -17,7 +17,7 @@ public interface PersonConditionRepository extends JpaRepository<PersonCondition
                 FROM PersonCondition pc
                 WHERE (:subject IS NULL OR pc.person.subjectId = :subject)
                   AND (:code IS NULL OR :code = '' OR pc.conditionMaster.icd9Code = :code)
-                  AND (:encounter IS NULL OR pc.hadmId = :encounter)
+                  AND (:encounter IS NULL OR pc.rowId = :encounter)
             """)
     Optional<List<PersonCondition>> searchPersonCondition(
             @Param("subject") Integer subject,

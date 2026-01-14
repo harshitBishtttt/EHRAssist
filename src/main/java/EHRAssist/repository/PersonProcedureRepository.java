@@ -15,12 +15,12 @@ public interface PersonProcedureRepository extends JpaRepository<PersonProcedure
             "JOIN UCIH.dbo.Procedure_Master pm " +
             "ON pp.cpt_number BETWEEN pm.mincodeinsubsection AND pm.maxcodeinsubsection " +
             "WHERE (:subjectId IS NULL OR pp.subject_id = :subjectId) " +
-            "AND (:hadmId IS NULL OR pp.hadm_id = :hadmId) " +
+            "AND (:encounterId IS NULL OR pp.row_id = :encounterId) " +
             "AND (:cptNumber IS NULL OR (pm.mincodeinsubsection <= :cptNumber AND pm.maxcodeinsubsection >= :cptNumber))",
             nativeQuery = true)
     List<Object[]> searchPersonProcedure(
             @Param("subjectId") Integer subjectId,
-            @Param("hadmId") Integer hadmId,
+            @Param("hadmId") Integer encounterId,
             @Param("cptNumber") Integer cptNumber
     );
 

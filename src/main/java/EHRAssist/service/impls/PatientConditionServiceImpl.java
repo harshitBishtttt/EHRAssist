@@ -1,5 +1,6 @@
 package EHRAssist.service.impls;
 
+import EHRAssist.model.ConditionMaster;
 import EHRAssist.model.PersonCondition;
 import EHRAssist.repository.PersonConditionRepository;
 import EHRAssist.service.PatientConditionService;
@@ -7,6 +8,7 @@ import org.hl7.fhir.r4.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import java.util.Date;
 import java.util.List;
@@ -79,12 +81,13 @@ public class PatientConditionServiceImpl implements PatientConditionService {
                             .setCode(pc.getSeverityCode())
                             .setDisplay(pc.getSeverity())
             ));
+            ConditionMaster conditionMaster = pc.getConditionMaster();
             condition.setCode(new CodeableConcept()
-                    .setText(pc.getConditionMaster().getLongTitle())
+                    .setText(!ObjectUtils.isEmpty(conditionMaster) ? conditionMaster.getLongTitle() : "")
                     .addCoding(new Coding()
                             .setSystem("http://hl7.org/fhir/sid/icd-10-cm")
-                            .setCode(pc.getConditionMaster().getIcd9Code())
-                            .setDisplay(pc.getConditionMaster().getLongTitle())
+                            .setCode(!ObjectUtils.isEmpty(conditionMaster) ? conditionMaster.getIcd9Code() : "")
+                            .setDisplay(!ObjectUtils.isEmpty(conditionMaster) ? conditionMaster.getLongTitle() : "")
                     ));
             condition.setSubject(new Reference("Patient/" + pc.getPerson().getSubjectId()));
             condition.setEncounter(new Reference("Encounter/" + pc.getHadmId()));

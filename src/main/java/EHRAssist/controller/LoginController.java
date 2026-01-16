@@ -2,6 +2,7 @@ package EHRAssist.controller;
 
 
 import EHRAssist.dto.request.LoginRequest;
+import EHRAssist.exceptionHandler.exceptions.InvalidFirebaseCredException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -34,11 +35,16 @@ public class LoginController {
         body.put("email", request.getEmail());
         body.put("password", request.getPassword());
         body.put("returnSecureToken", true);
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<Map<String, Object>> entity = new HttpEntity<>(body, headers);
-        ResponseEntity<String> response =
-                restTemplate.postForEntity(url, entity, String.class);
+        ResponseEntity<String> response;
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            HttpEntity<Map<String, Object>> entity = new HttpEntity<>(body, headers);
+            response =
+                    restTemplate.postForEntity(url, entity, String.class);
+        } catch (RuntimeException ex) {
+            throw new InvalidFirebaseCredException("Incorrect Credentials!");
+        }
         return response;
     }
 }

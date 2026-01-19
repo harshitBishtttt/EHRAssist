@@ -22,13 +22,15 @@ public class ObservationDaoImpl implements ObservationDao {
         StringBuilder query = new StringBuilder("""
                     WITH LatestMeasurements AS (
                         SELECT
-                            pm.*,
-                            ROW_NUMBER() OVER (
-                                PARTITION BY pm.itemid
-                                ORDER BY pm.charttime DESC
-                            ) AS rn
-                        FROM UCIH.dbo.Person_Measurement pm
-                        WHERE 1=1
+                             pm.*,
+                             ROW_NUMBER() OVER (
+                                 PARTITION BY pm.subject_id, pm.itemid
+                                 ORDER BY pm.charttime DESC
+                             ) AS rn
+                         FROM
+                             UCIH.dbo.Person_Measurement pm
+                     WHERE
+                        1 = 1
                 """);
 
         if (!ObjectUtils.isEmpty(request.getSubject())) {

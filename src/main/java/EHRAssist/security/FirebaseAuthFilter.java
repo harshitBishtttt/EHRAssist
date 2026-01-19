@@ -17,7 +17,7 @@ public class FirebaseAuthFilter extends OncePerRequestFilter {
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getRequestURI();
         // Allow login API without token
-        return path.startsWith("/auth/");
+        return path.startsWith("/");
     }
 
     @Override

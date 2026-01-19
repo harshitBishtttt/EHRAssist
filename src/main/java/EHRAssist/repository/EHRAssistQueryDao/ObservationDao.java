@@ -1,11 +1,10 @@
 package EHRAssist.repository.EHRAssistQueryDao;
 
-import EHRAssist.dto.request.ObservationRequest;
-import jakarta.persistence.Query;
+import EHRAssist.dto.ObservationDto;
+
+import java.util.List;
 
 public interface ObservationDao {
-    String getNativeObservationQuery(ObservationRequest request);
-
-    Query setValueToNativeObservationQuery(String sql, ObservationRequest request);
+    List<Object[]> setValueToNativeObservationQuery(ObservationDto request);
 
 }

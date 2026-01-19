@@ -5,9 +5,10 @@ import org.hl7.fhir.r4.model.Bundle;
 import org.springframework.data.domain.Pageable;
 
 public interface PatientObservationService {
-    Bundle getPatientObservations(Integer subject,
+    Bundle getPatientObservations(String subject,
                                   String code,
-                                  Integer encounter,
+                                  String valueQuantity,
+                                  String encounter,
                                   Pageable pageable);
 
 }

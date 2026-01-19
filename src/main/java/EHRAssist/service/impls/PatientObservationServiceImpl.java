@@ -1,12 +1,16 @@
 package EHRAssist.service.impls;
 
-import EHRAssist.repository.PersonMeasurementRepository;
+import EHRAssist.dto.FhirQuantity;
+import EHRAssist.dto.ObservationDto;
+import EHRAssist.repository.EHRAssistQueryDao.ObservationDao;
 import EHRAssist.service.PatientObservationService;
 import org.hl7.fhir.r4.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -14,7 +18,8 @@ import java.util.List;
 public class PatientObservationServiceImpl implements PatientObservationService {
 
     @Autowired
-    private PersonMeasurementRepository personMeasurementRepository;
+    private ObservationDao observationDao;
+
 
     static String toVitalSignsCode(String input) {
         return input == null
@@ -85,8 +90,10 @@ public class PatientObservationServiceImpl implements PatientObservationService 
                 .setCode((String) ittr[12])
                 .setDisplay((String) ittr[9]);
         component.getCode().setText((String) ittr[9]);
+        Number value = (Number) ittr[6];
+        BigDecimal bdValue = value != null ? BigDecimal.valueOf(value.doubleValue()) : BigDecimal.ZERO;
         component.setValue(new Quantity()
-                .setValue(((Number) ittr[6]).doubleValue())
+                .setValue(bdValue)
                 .setUnit((String) ittr[7])
                 .setSystem("http://unitsofmeasure.org")
                 .setCode((String) ittr[7]));
@@ -94,23 +101,34 @@ public class PatientObservationServiceImpl implements PatientObservationService 
     }
 
     @Override
-    public Bundle getPatientObservations(Integer subject, String code, Integer encounter, Pageable pageable) {
+    public Bundle getPatientObservations(String subject,
+                                         String code,
+                                         String valueQuantity,
+                                         String encounter,
+                                         Pageable pageable) {
+
+        ObservationDto dto = new ObservationDto();
+        dto.setSubject(!ObjectUtils.isEmpty(subject) ? Integer.parseInt(subject) : null);
+        dto.setEncounter(!ObjectUtils.isEmpty(encounter) ? Integer.parseInt(encounter) : null);
+        dto.setCode(!ObjectUtils.isEmpty(code) ? code : "");
+        FhirQuantity obj = !ObjectUtils.isEmpty(valueQuantity) ? FhirQuantity.parse(valueQuantity) : null;
+        dto.setFhirQuantity(obj);
 
         Bundle bundle = new Bundle();
         bundle.setType(Bundle.BundleType.SEARCHSET);
-        bundle.setId(subject.toString());
         bundle.getMeta().setLastUpdated(new Date());
+        List<Object[]> latestMeasurements = observationDao.setValueToNativeObservationQuery(dto);
 
-        List<Object[]> latestMeasurements =
-                personMeasurementRepository.findLatestMeasurements(subject, code, encounter);
 
-        for (Object[] ittr : latestMeasurements) {
-            Observation obs = buildObservation(ittr);
+        if (!ObjectUtils.isEmpty(latestMeasurements)) {
+            for (Object[] ittr : latestMeasurements) {
+                Observation obs = buildObservation(ittr);
 
-            Bundle.BundleEntryComponent entry = bundle.addEntry();
-            entry.setFullUrl("http://10.131.58.59:481/baseR4/Observation/" + obs.getId());
-            entry.setResource(obs);
-            entry.getSearch().setMode(Bundle.SearchEntryMode.MATCH);
+                Bundle.BundleEntryComponent entry = bundle.addEntry();
+                entry.setFullUrl("http://10.131.58.59:481/baseR4/Observation/" + obs.getId());
+                entry.setResource(obs);
+                entry.getSearch().setMode(Bundle.SearchEntryMode.MATCH);
+            }
         }
 
         bundle.setTotal(latestMeasurements.size());

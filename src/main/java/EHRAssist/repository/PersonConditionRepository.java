@@ -13,10 +13,13 @@ import java.util.Optional;
 public interface PersonConditionRepository extends JpaRepository<PersonCondition, Integer> {
 
     @Query("""
-                SELECT pc
+                SELECT DISTINCT pc
                 FROM PersonCondition pc
-                WHERE (:subject IS NULL OR pc.person.subjectId = :subject)
-                  AND (:code IS NULL OR :code = '' OR pc.conditionMaster.icd9Code = :code)
+                LEFT JOIN pc.conditionMaster cm
+                LEFT JOIN pc.person p
+                WHERE p.nameType = 'official'
+                  AND (:subject IS NULL OR p.subjectId = :subject)
+                  AND (:code IS NULL OR :code = '' OR cm.icd9Code = :code)
                   AND (:encounter IS NULL OR pc.rowId = :encounter)
             """)
     Optional<List<PersonCondition>> searchPersonCondition(

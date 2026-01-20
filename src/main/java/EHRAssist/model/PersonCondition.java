@@ -18,9 +18,9 @@ public class PersonCondition {
     @Column(name = "row_id")
     private Integer rowId;
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "subject_id", referencedColumnName = "subject_id")
-    private Person person;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "subject_id", referencedColumnName = "subject_id_from_person_table")
+    private PersonName person;
 
     @Column(name = "hadm_id")
     private Integer hadmId;
@@ -34,7 +34,7 @@ public class PersonCondition {
     private String severity;
 
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "icd9_code")
     private ConditionMaster conditionMaster;
 

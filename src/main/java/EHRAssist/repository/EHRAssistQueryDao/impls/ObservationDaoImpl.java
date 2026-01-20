@@ -91,7 +91,7 @@ public class ObservationDaoImpl implements ObservationDao {
         return query.toString();
     }
 
-    public List<Object[]> setValueToNativeObservationQuery(ObservationDto request) {
+    public List<Object[]> getAllObservation(ObservationDto request) {
 
         String sql = getNativeObservationQuery(request);
         Query query = entityManager.createNativeQuery(sql);

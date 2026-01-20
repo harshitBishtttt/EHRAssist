@@ -3,7 +3,6 @@ package EHRAssist.service.impls;
 import EHRAssist.dto.FhirQuantity;
 import EHRAssist.dto.ObservationDto;
 import EHRAssist.exceptionHandler.exceptions.FhirBadRequestException;
-import EHRAssist.exceptionHandler.exceptions.MissingParametersException;
 import EHRAssist.repository.EHRAssistQueryDao.ObservationDao;
 import EHRAssist.service.PatientObservationService;
 import org.hl7.fhir.r4.model.*;
@@ -121,7 +120,7 @@ public class PatientObservationServiceImpl implements PatientObservationService 
         Bundle bundle = new Bundle();
         bundle.setType(Bundle.BundleType.SEARCHSET);
         bundle.getMeta().setLastUpdated(new Date());
-        List<Object[]> latestMeasurements = observationDao.setValueToNativeObservationQuery(dto);
+        List<Object[]> latestMeasurements = observationDao.getAllObservation(dto);
 
 
         if (!ObjectUtils.isEmpty(latestMeasurements)) {

@@ -59,7 +59,7 @@ public class PatientPrescriptionServiceImpl implements PatientPrescriptionServic
         dosage.addDoseAndRate(new Dosage.DosageDoseAndRateComponent()
                 .setDose(new Quantity()
                         .setValue((!ObjectUtils.isEmpty(obj.getDoseValRx()) ?
-                                new BigDecimal(obj.getDoseUnitRx()) : BigDecimal.ZERO))
+                                obj.getDoseValRx() : BigDecimal.ZERO))
                         .setUnit(!ObjectUtils.isEmpty(obj.getDoseUnitRx()) ? obj.getDoseUnitRx() : "")
                         .setSystem("http://www.nlm.nih.gov/research/umls/rxnorm")
                         .setCode(!ObjectUtils.isEmpty(obj.getFormUnitDisp()) ? "{" + obj.getFormUnitDisp() + "}" : "")));

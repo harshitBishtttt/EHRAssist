@@ -19,9 +19,9 @@ public interface PersonProcedureRepository extends JpaRepository<PersonProcedure
             "AND (:cptNumber IS NULL OR (pm.mincodeinsubsection <= :cptNumber AND pm.maxcodeinsubsection >= :cptNumber))",
             nativeQuery = true)
     List<Object[]> searchPersonProcedure(
-            @Param("subjectId") Integer subjectId,
-            @Param("hadmId") Integer encounterId,
-            @Param("cptNumber") Integer cptNumber
+            Integer subjectId,
+            Integer encounterId,
+            Integer cptNumber
     );
 
 }

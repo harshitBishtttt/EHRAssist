@@ -51,7 +51,7 @@ public class EHRAController {
 
     @GetMapping("/Condition")
     ResponseEntity<String> getPatientCondition(
-            @RequestParam Integer subject,
+            @RequestParam(required = false) Integer subject,
             @RequestParam(required = false, defaultValue = "") String code,
             @RequestParam(required = false) Integer encounter,
             Pageable pageable

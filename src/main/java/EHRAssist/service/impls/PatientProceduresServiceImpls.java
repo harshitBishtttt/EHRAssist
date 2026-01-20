@@ -6,6 +6,7 @@ import org.hl7.fhir.r4.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import java.sql.Timestamp;
 import java.util.Date;
@@ -40,7 +41,11 @@ public class PatientProceduresServiceImpls implements PatientProceduresService {
                 .setCode(String.valueOf(obj[5]))
                 .setDisplay((String) obj[9]));
         procedure.setCode(code);
-        procedure.setSubject(new Reference("Patient/" + obj[1]));
+        Reference reference = new Reference();
+        reference.setReference("Patient/" + obj[1]);
+        reference.setDisplay(!ObjectUtils.isEmpty(obj[24]) ? (obj[24]) + " " + (!ObjectUtils.isEmpty(obj[25]) ?
+                (obj[25]) + " " + (!ObjectUtils.isEmpty(obj[26]) ? String.valueOf(obj[26]) : "") : "") : "");
+        procedure.setSubject(reference);
         procedure.setEncounter(new Reference("Encounter/" + obj[2]));
         return procedure;
     }

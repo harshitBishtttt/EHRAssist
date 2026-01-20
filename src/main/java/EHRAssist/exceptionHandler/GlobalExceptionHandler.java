@@ -2,6 +2,7 @@ package EHRAssist.exceptionHandler;
 
 import EHRAssist.dto.response.ErrorResponse;
 import EHRAssist.exceptionHandler.exceptions.InvalidFirebaseCredException;
+import EHRAssist.exceptionHandler.exceptions.MissingParametersException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -28,6 +29,13 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handelInvalidFirebaseCredException(InvalidFirebaseCredException ex) {
         return ResponseEntity
                 .status(HttpStatus.UNAUTHORIZED)
+                .body(new ErrorResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(MissingParametersException.class)
+    public ResponseEntity<ErrorResponse> handelMissingParametersException(MissingParametersException ex) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
                 .body(new ErrorResponse(ex.getMessage()));
     }
 

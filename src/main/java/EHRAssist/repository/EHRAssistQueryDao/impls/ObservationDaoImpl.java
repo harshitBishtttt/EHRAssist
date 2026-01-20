@@ -69,7 +69,7 @@ public class ObservationDaoImpl implements ObservationDao {
                     WHERE lm.rn = 1
                 """);
 
-        if (!ObjectUtils.isEmpty(request.getFhirQuantity())) {
+        if (!ObjectUtils.isEmpty(request.getCode()) && !ObjectUtils.isEmpty(request.getFhirQuantity())) {
             FhirQuantity fhirQuantity = request.getFhirQuantity();
 
             switch (fhirQuantity.getPrefix().toLowerCase()) {
@@ -104,7 +104,7 @@ public class ObservationDaoImpl implements ObservationDao {
             query.setParameter("encounter", request.getEncounter());
         }
 
-        if (!ObjectUtils.isEmpty(request.getFhirQuantity())) {
+        if (!ObjectUtils.isEmpty(request.getCode()) && !ObjectUtils.isEmpty(request.getFhirQuantity())) {
             FhirQuantity fhirQuantity = request.getFhirQuantity();
 
             if (!ObjectUtils.isEmpty(fhirQuantity.getNumber())) {

@@ -2,6 +2,7 @@ package EHRAssist.service.impls;
 
 import EHRAssist.dto.FhirQuantity;
 import EHRAssist.dto.ObservationDto;
+import EHRAssist.exceptionHandler.exceptions.MissingParametersException;
 import EHRAssist.repository.EHRAssistQueryDao.ObservationDao;
 import EHRAssist.service.PatientObservationService;
 import org.hl7.fhir.r4.model.*;
@@ -106,7 +107,9 @@ public class PatientObservationServiceImpl implements PatientObservationService 
                                          String valueQuantity,
                                          String encounter,
                                          Pageable pageable) {
-
+        if (ObjectUtils.isEmpty(subject) && ObjectUtils.isEmpty(code) && ObjectUtils.isEmpty(encounter)) {
+            throw new MissingParametersException("Observation search params are missing at least provide code!");
+        }
         ObservationDto dto = new ObservationDto();
         dto.setSubject(!ObjectUtils.isEmpty(subject) ? Integer.parseInt(subject) : null);
         dto.setEncounter(!ObjectUtils.isEmpty(encounter) ? Integer.parseInt(encounter) : null);

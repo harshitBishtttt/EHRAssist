@@ -1,6 +1,7 @@
 package EHRAssist.service.impls;
 
 import EHRAssist.exceptionHandler.exceptions.FhirBadRequestException;
+import EHRAssist.model.PersonName;
 import EHRAssist.model.PersonPrescription;
 import EHRAssist.repository.PatientPrescriptionRepository;
 import EHRAssist.service.PatientPrescriptionService;
@@ -40,7 +41,13 @@ public class PatientPrescriptionServiceImpl implements PatientPrescriptionServic
         mr.setMedication(med);
         Reference subjectRef = new Reference();
         subjectRef.setReference("Patient/" + obj.getSubjectId());
-        subjectRef.setDisplay("");
+        if (!ObjectUtils.isEmpty(obj.getPersonName())) {
+            PersonName personName = obj.getPersonName();
+            subjectRef.setDisplay(personName.getFirstName()
+                    + " " +
+                    personName.getMiddleName() + " " +
+                    personName.getLastName());
+        }
         mr.setSubject(subjectRef);
         mr.setAuthoredOnElement(new DateTimeType("2146-07-21"));
         mr.addReasonCode(new CodeableConcept().setText("Fever and body pain"));

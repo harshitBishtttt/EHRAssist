@@ -92,9 +92,10 @@ public class EHRAController {
     }
 
     @GetMapping("/MedicationRequest")
-    ResponseEntity<String> getPatientPrescription(@RequestParam Integer subject,
-                                                  @RequestParam(required = false) Integer prescriptionId) {
-        Bundle response = patientPrescriptionService.getPatientPrescription(subject, prescriptionId);
+    ResponseEntity<String> getPatientPrescription(@RequestParam(required = false) Integer subject,
+                                                  @RequestParam(required = false) Integer prescriptionId,
+                                                  @RequestParam(required = false) String code) {
+        Bundle response = patientPrescriptionService.getPatientPrescription(subject, prescriptionId, code);
         return ehraUtils.fhirResponseWrapper(response);
     }
 

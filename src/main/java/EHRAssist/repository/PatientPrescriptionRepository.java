@@ -3,7 +3,6 @@ package EHRAssist.repository;
 import EHRAssist.model.PersonPrescription;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -11,17 +10,19 @@ import java.util.List;
 @Repository
 public interface PatientPrescriptionRepository extends JpaRepository<PersonPrescription, Integer> {
     @Query("""
-    SELECT DISTINCT pm
-    FROM PersonPrescription pm
-    LEFT JOIN PersonName pn
-      ON pn.subjectId = pm.subjectId
-     AND pn.nameType = 'official'
-    WHERE (:subjectId IS NULL OR pm.subjectId = :subjectId)
-      AND (:rowId IS NULL OR pm.rowId = :rowId)
-""")
+            SELECT DISTINCT pm
+            FROM PersonPrescription pm
+            LEFT JOIN PersonName pn
+              ON pn.subjectId = pm.subjectId
+             AND pn.nameType = 'official'
+            WHERE (:subjectId IS NULL OR pm.subjectId = :subjectId)
+              AND (:rowId IS NULL OR pm.rowId = :rowId)
+              AND (:code IS NULL OR pm.formularyDrugCd = :code)
+            """)
     List<PersonPrescription> findBySubjectIdOrRowId(
-            @Param("subjectId") Integer subjectId,
-            @Param("rowId") Integer rowId
+            Integer subjectId,
+            Integer rowId,
+            String code
     );
 
 

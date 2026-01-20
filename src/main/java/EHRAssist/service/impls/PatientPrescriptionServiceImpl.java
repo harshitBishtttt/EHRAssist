@@ -1,15 +1,20 @@
 package EHRAssist.service.impls;
 
+import EHRAssist.exceptionHandler.exceptions.FhirBadRequestException;
 import EHRAssist.model.PersonPrescription;
 import EHRAssist.repository.PatientPrescriptionRepository;
 import EHRAssist.service.PatientPrescriptionService;
 import org.hl7.fhir.r4.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.UUID;
 
 @Service
 public class PatientPrescriptionServiceImpl implements PatientPrescriptionService {
@@ -39,7 +44,7 @@ public class PatientPrescriptionServiceImpl implements PatientPrescriptionServic
         mr.setSubject(subjectRef);
         mr.setAuthoredOnElement(new DateTimeType("2146-07-21"));
         mr.addReasonCode(new CodeableConcept().setText("Fever and body pain"));
-        mr.addNote(new Annotation().setText("Do not exceed recommended dose"));
+        mr.addNote(new Annotation().setText(!ObjectUtils.isEmpty(obj.getProdStrength()) ? obj.getProdStrength() : ""));
         Dosage dosage = new Dosage();
         dosage.setText(obj.getProdStrength());
         Timing timing = new Timing();
@@ -48,23 +53,24 @@ public class PatientPrescriptionServiceImpl implements PatientPrescriptionServic
         dosage.setRoute(new CodeableConcept().addCoding(
                 new Coding()
                         .setSystem("http://www.nlm.nih.gov/research/umls/rxnorm")
-                        .setCode(obj.getRoute())
-                        .setDisplay("Oral")
+                        .setCode(!ObjectUtils.isEmpty(obj.getRoute()) ? obj.getRoute().toUpperCase() : "")
+                        .setDisplay(!ObjectUtils.isEmpty(obj.getRoute()) ? obj.getRoute() : "")
         ));
         dosage.addDoseAndRate(new Dosage.DosageDoseAndRateComponent()
                 .setDose(new Quantity()
-                        .setValue(0.58)
-                        .setUnit("mL")
+                        .setValue((!ObjectUtils.isEmpty(obj.getDoseValRx()) ?
+                                new BigDecimal(obj.getDoseUnitRx()) : BigDecimal.ZERO))
+                        .setUnit(!ObjectUtils.isEmpty(obj.getDoseUnitRx()) ? obj.getDoseUnitRx() : "")
                         .setSystem("http://www.nlm.nih.gov/research/umls/rxnorm")
-                        .setCode("{PNEU25I}")));
+                        .setCode(!ObjectUtils.isEmpty(obj.getFormUnitDisp()) ? "{" + obj.getFormUnitDisp() + "}" : "")));
         mr.addDosageInstruction(dosage);
         MedicationRequest.MedicationRequestDispenseRequestComponent dispense =
                 new MedicationRequest.MedicationRequestDispenseRequestComponent();
         dispense.setQuantity(new Quantity()
                 .setValue(5)
-                .setUnit("tablet")
+                .setUnit(!ObjectUtils.isEmpty(obj.getFormUnitDisp()) ? obj.getFormUnitDisp() : "")
                 .setSystem("http://unitsofmeasure.org")
-                .setCode("{tbl}"));
+                .setCode(!ObjectUtils.isEmpty(obj.getFormUnitDisp()) ? "{" + obj.getFormUnitDisp() + "}" : ""));
         dispense.setExpectedSupplyDuration((Duration) new Duration()
                 .setValue(10)
                 .setUnit("days")
@@ -75,17 +81,22 @@ public class PatientPrescriptionServiceImpl implements PatientPrescriptionServic
     }
 
 
-    public Bundle getPatientPrescription(Integer subjectId, Integer prescriptionId) {
-        List<PersonPrescription> prescriptions =
-                patientPrescriptionRepository.findBySubjectIdOrRowId(subjectId, prescriptionId);
-        if (prescriptions == null || prescriptions.isEmpty()) {
-            return null;
-        }
+    public Bundle getPatientPrescription(Integer subjectId, Integer prescriptionId, String code) {
+
         Bundle bundle = new Bundle();
         bundle.setType(Bundle.BundleType.SEARCHSET);
-        bundle.setId(subjectId.toString());
-        bundle.setTotal(prescriptions.size());
+        bundle.setId(UUID.randomUUID().toString());
         bundle.setMeta(new Meta().setLastUpdated(new Date()));
+        if (ObjectUtils.isEmpty(subjectId) && ObjectUtils.isEmpty(code) && ObjectUtils.isEmpty(prescriptionId)) {
+            throw new FhirBadRequestException("In Prescription search params are missing, at least provide code!");
+        }
+        List<PersonPrescription> prescriptions =
+                patientPrescriptionRepository.findBySubjectIdOrRowId(subjectId, prescriptionId, code);
+        if (ObjectUtils.isEmpty(prescriptions)) {
+            bundle.setTotal(0);
+            return bundle;
+        }
+        bundle.setTotal(prescriptions.size());
         bundle.addLink()
                 .setRelation("self")
                 .setUrl("https://hapi.fhir.org/baseR4/MedicationRequest?subject=" + subjectId);

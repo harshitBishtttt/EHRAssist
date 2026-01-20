@@ -1,11 +1,13 @@
 package EHRAssist.model;
 
+import com.google.type.Decimal;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.JoinFormula;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -60,7 +62,7 @@ public class PersonPrescription {
     private String prodStrength;
 
     @Column(name = "dose_val_rx", nullable = false, length = 50)
-    private String doseValRx;
+    private BigDecimal doseValRx;
 
     @Column(name = "dose_unit_rx", nullable = false, length = 50)
     private String doseUnitRx;

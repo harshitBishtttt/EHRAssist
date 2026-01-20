@@ -29,7 +29,7 @@ public class PatientConditionServiceImpl implements PatientConditionService {
 
         Bundle bundle = new Bundle();
 
-        if (subject == null && (code == null || code.isEmpty()) && encounter == null) {
+        if (ObjectUtils.isEmpty(subject) && ObjectUtils.isEmpty(code) && ObjectUtils.isEmpty(encounter)) {
             throw new FhirBadRequestException("In Condition search params are missing, at least provide code!");
         }
 

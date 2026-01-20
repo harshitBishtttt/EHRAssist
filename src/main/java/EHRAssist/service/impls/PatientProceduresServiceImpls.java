@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class PatientProceduresServiceImpls implements PatientProceduresService {
@@ -51,7 +52,7 @@ public class PatientProceduresServiceImpls implements PatientProceduresService {
 
         List<Object[]> objects = personProcedureRepository.searchPersonProcedure(subject, encounter, code);
         Bundle bundle = new Bundle();
-        bundle.setId(subject.toString());
+        bundle.setId(UUID.randomUUID().toString());
         bundle.setType(Bundle.BundleType.SEARCHSET);
         bundle.setTotal(objects.size());
         bundle.setMeta(new Meta().setLastUpdated(new Date()));

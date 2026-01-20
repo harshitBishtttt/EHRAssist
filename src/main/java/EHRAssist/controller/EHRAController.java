@@ -63,7 +63,7 @@ public class EHRAController {
 
     @GetMapping("/Procedure")
     ResponseEntity<String> getPatientProcedure(
-            @RequestParam Integer subject,
+            @RequestParam(required = false) Integer subject,
             @RequestParam(required = false) Integer encounter,
             @RequestParam(required = false) Integer code,
             Pageable pageable) {

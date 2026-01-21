@@ -50,8 +50,8 @@ public class PatientPrescriptionServiceImpl implements PatientPrescriptionServic
         }
         mr.setSubject(subjectRef);
         mr.setAuthoredOnElement(new DateTimeType("2146-07-21"));
-        mr.addReasonCode(new CodeableConcept().setText("Fever and body pain"));
-        mr.addNote(new Annotation().setText(!ObjectUtils.isEmpty(obj.getProdStrength()) ? obj.getProdStrength() : ""));
+        mr.addReasonCode(new CodeableConcept().setText(!ObjectUtils.isEmpty(obj.getReasonCode()) ? obj.getReasonCode() : ""));
+        mr.addNote(new Annotation().setText(!ObjectUtils.isEmpty(obj.getPrescribedNote()) ? obj.getPrescribedNote() : ""));
         Dosage dosage = new Dosage();
         dosage.setText(obj.getProdStrength());
         Timing timing = new Timing();

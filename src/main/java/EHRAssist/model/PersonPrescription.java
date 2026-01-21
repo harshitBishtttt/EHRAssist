@@ -76,6 +76,12 @@ public class PersonPrescription {
     @Column(name = "route", nullable = false, length = 50)
     private String route;
 
+    @Column(name = "reason_code")
+    private String reasonCode;
+
+    @Column(name = "prescribed_note")
+    private String prescribedNote;
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinFormula("""

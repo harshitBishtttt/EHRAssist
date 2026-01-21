@@ -1,6 +1,7 @@
 package EHRAssist.repository;
 
 import EHRAssist.model.Person;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -36,7 +37,8 @@ public interface PersonRepository extends JpaRepository<Person, Short> {
             @Param("email") String email,
             @Param("phone") String phone,
             @Param("birthdate") LocalDate birthdate,
-            @Param("gender") String gender
+            @Param("gender") String gender,
+            Pageable pageable
     );
 
 

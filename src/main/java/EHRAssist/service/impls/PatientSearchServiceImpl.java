@@ -136,7 +136,7 @@ public class PatientSearchServiceImpl implements PatientSearchService {
                                 Pageable pageable) {
 
         Optional<List<Person>> persons = personRepository
-                .searchPerson(family, given, email, phone, birthdate, gender);
+                .searchPerson(family, given, email, phone, birthdate, gender, pageable);
 
         Bundle bundle = new Bundle();
         bundle.setId(UUID.randomUUID().toString());

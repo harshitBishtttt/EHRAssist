@@ -120,7 +120,7 @@ public class PatientObservationServiceImpl implements PatientObservationService 
         Bundle bundle = new Bundle();
         bundle.setType(Bundle.BundleType.SEARCHSET);
         bundle.getMeta().setLastUpdated(new Date());
-        List<Object[]> latestMeasurements = observationDao.getAllObservation(dto);
+        List<Object[]> latestMeasurements = observationDao.getAllObservation(dto, pageable);
 
 
         if (!ObjectUtils.isEmpty(latestMeasurements)) {

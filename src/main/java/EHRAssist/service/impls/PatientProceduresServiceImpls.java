@@ -55,7 +55,7 @@ public class PatientProceduresServiceImpls implements PatientProceduresService {
                                       Integer code,
                                       Pageable pageable) {
 
-        List<Object[]> objects = personProcedureRepository.searchPersonProcedure(subject, encounter, code);
+        List<Object[]> objects = personProcedureRepository.searchPersonProcedure(subject, encounter, code, pageable);
         Bundle bundle = new Bundle();
         bundle.setId(UUID.randomUUID().toString());
         bundle.setType(Bundle.BundleType.SEARCHSET);

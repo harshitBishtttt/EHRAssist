@@ -1,11 +1,11 @@
 package EHRAssist.controller;
 
-import EHRAssist.dto.response.PatientEncounterResponse;
 import EHRAssist.service.*;
 import EHRAssist.utils.EHRAUtils;
 import org.hl7.fhir.r4.model.Bundle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,7 +43,7 @@ public class EHRAController {
             @RequestParam(required = false) String phone,
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate birthdate,
             @RequestParam(required = false, defaultValue = "") String gender,
-            Pageable pageable
+            @PageableDefault(page = 0, size = 10) Pageable pageable
     ) {
         Bundle response = patientSearchService.searchPatient(family, given, email, phone, birthdate, gender, pageable);
         return ehraUtils.fhirResponseWrapper(response);
@@ -54,7 +54,7 @@ public class EHRAController {
             @RequestParam(required = false) Integer subject,
             @RequestParam(required = false, defaultValue = "") String code,
             @RequestParam(required = false) Integer encounter,
-            Pageable pageable
+            @PageableDefault(page = 0, size = 10) Pageable pageable
     ) {
         Bundle response = patientConditionService.getPatientCondition(subject, code, encounter, pageable);
         return ehraUtils.fhirResponseWrapper(response);
@@ -66,7 +66,7 @@ public class EHRAController {
             @RequestParam(required = false) Integer subject,
             @RequestParam(required = false) Integer encounter,
             @RequestParam(required = false) Integer code,
-            Pageable pageable) {
+            @PageableDefault(page = 0, size = 10) Pageable pageable) {
         Bundle response = patientProceduresService.getPatientProcedure(subject, encounter, code, pageable);
         return ehraUtils.fhirResponseWrapper(response);
     }
@@ -75,7 +75,7 @@ public class EHRAController {
     ResponseEntity<String> getPatientEncounter(
             @RequestParam Integer subject,
             @RequestParam(required = false) Integer count,
-            Pageable pageable) {
+            @PageableDefault(page = 0, size = 10) Pageable pageable) {
         Bundle response = patientEncounterService.getPatientEncounter(subject, count, pageable);
         return ehraUtils.fhirResponseWrapper(response);
     }
@@ -86,7 +86,7 @@ public class EHRAController {
             @RequestParam(required = false) String code,
             @RequestParam(name = "value-quantity", required = false) String valueQuantity,
             @RequestParam(required = false) String encounter,
-            Pageable pageable) {
+            @PageableDefault(page = 0, size = 10) Pageable pageable) {
         Bundle response = getPatientObservations.getPatientObservations(subject, code, valueQuantity, encounter, pageable);
         return ehraUtils.fhirResponseWrapper(response);
     }
@@ -94,8 +94,9 @@ public class EHRAController {
     @GetMapping("/MedicationRequest")
     ResponseEntity<String> getPatientPrescription(@RequestParam(required = false) Integer subject,
                                                   @RequestParam(required = false) Integer prescriptionId,
-                                                  @RequestParam(required = false) String code) {
-        Bundle response = patientPrescriptionService.getPatientPrescription(subject, prescriptionId, code);
+                                                  @RequestParam(required = false) String code,
+                                                  @PageableDefault(page = 0, size = 10) Pageable pageable) {
+        Bundle response = patientPrescriptionService.getPatientPrescription(subject, prescriptionId, code,pageable);
         return ehraUtils.fhirResponseWrapper(response);
     }
 

@@ -6,6 +6,7 @@ import EHRAssist.repository.EHRAssistQueryDao.ObservationDao;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 
@@ -91,7 +92,7 @@ public class ObservationDaoImpl implements ObservationDao {
         return query.toString();
     }
 
-    public List<Object[]> getAllObservation(ObservationDto request) {
+    public List<Object[]> getAllObservation(ObservationDto request, Pageable pageable) {
 
         String sql = getNativeObservationQuery(request);
         Query query = entityManager.createNativeQuery(sql);
@@ -119,6 +120,8 @@ public class ObservationDaoImpl implements ObservationDao {
         if (!ObjectUtils.isEmpty(request.getCode())) {
             query.setParameter("loincCode", request.getCode());
         }
+        query.setFirstResult((int) pageable.getOffset());
+        query.setMaxResults(pageable.getPageSize());
 
         return query.getResultList();
     }

@@ -4,6 +4,7 @@ import EHRAssist.repository.EHRAssistQueryDao.ConditionDao;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 
@@ -36,11 +37,12 @@ public class ConditionDaoImpl implements ConditionDao {
         if (!ObjectUtils.isEmpty(encounter)) {
             query += " AND pc.row_id = :encounter ;";
         }
+
         return query;
     }
 
     @Override
-    public List<Object[]> getMyConditions(Integer subjectId, String code, Integer encounter) {
+    public List<Object[]> getMyConditions(Integer subjectId, String code, Integer encounter, Pageable pageable) {
 
         String sql = getNativeObservationQuery(subjectId, code, encounter);
         Query query = entityManager.createNativeQuery(sql);
@@ -54,6 +56,8 @@ public class ConditionDaoImpl implements ConditionDao {
         if (!ObjectUtils.isEmpty(encounter)) {
             query.setParameter("encounter", encounter);
         }
+        query.setFirstResult((int) pageable.getOffset());
+        query.setMaxResults(pageable.getPageSize());
         return query.getResultList();
     }
 

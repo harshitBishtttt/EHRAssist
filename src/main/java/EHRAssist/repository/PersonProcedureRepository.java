@@ -1,6 +1,7 @@
 package EHRAssist.repository;
 
 import EHRAssist.model.PersonProcedure;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -34,7 +35,8 @@ public interface PersonProcedureRepository extends JpaRepository<PersonProcedure
     List<Object[]> searchPersonProcedure(
             Integer subjectId,
             Integer encounterId,
-            Integer cptNumber
+            Integer cptNumber,
+            Pageable pageable
     );
 
 }

@@ -34,7 +34,7 @@ public class PatientConditionServiceImpl implements PatientConditionService {
         }
 
         List<Object[]> personConditions =
-                conditionDao.getMyConditions(subject, code, encounter);
+                conditionDao.getMyConditions(subject, code, encounter,pageable);
 
         bundle.setType(Bundle.BundleType.SEARCHSET);
         bundle.setId(UUID.randomUUID().toString());

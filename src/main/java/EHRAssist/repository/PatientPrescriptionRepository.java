@@ -1,6 +1,7 @@
 package EHRAssist.repository;
 
 import EHRAssist.model.PersonPrescription;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -22,7 +23,8 @@ public interface PatientPrescriptionRepository extends JpaRepository<PersonPresc
     List<PersonPrescription> findBySubjectIdOrRowId(
             Integer subjectId,
             Integer rowId,
-            String code
+            String code,
+            Pageable pageable
     );
 
 

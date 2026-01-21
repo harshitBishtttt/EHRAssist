@@ -7,6 +7,7 @@ import EHRAssist.repository.PatientPrescriptionRepository;
 import EHRAssist.service.PatientPrescriptionService;
 import org.hl7.fhir.r4.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
@@ -14,7 +15,6 @@ import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.UUID;
 
 @Service
@@ -88,7 +88,7 @@ public class PatientPrescriptionServiceImpl implements PatientPrescriptionServic
     }
 
 
-    public Bundle getPatientPrescription(Integer subjectId, Integer prescriptionId, String code) {
+    public Bundle getPatientPrescription(Integer subjectId, Integer prescriptionId, String code, Pageable pageable) {
 
         Bundle bundle = new Bundle();
         bundle.setType(Bundle.BundleType.SEARCHSET);
@@ -98,7 +98,7 @@ public class PatientPrescriptionServiceImpl implements PatientPrescriptionServic
             throw new FhirBadRequestException("In Prescription search params are missing, at least provide code!");
         }
         List<PersonPrescription> prescriptions =
-                patientPrescriptionRepository.findBySubjectIdOrRowId(subjectId, prescriptionId, code);
+                patientPrescriptionRepository.findBySubjectIdOrRowId(subjectId, prescriptionId, code,pageable);
         if (ObjectUtils.isEmpty(prescriptions)) {
             bundle.setTotal(0);
             return bundle;
